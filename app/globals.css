@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Default (bold) theme — prevents flash of wrong colors on SSR */
+:root {
+  --cv-bg: #fbf6ee;
+  --cv-surface: #ffffff;
+  --cv-ink: #1a1614;
+  --cv-ink-soft: #5b524b;
+  --cv-ink-muted: #8e857d;
+  --cv-line: rgba(26, 22, 20, 0.08);
+  --cv-accent: #c43823;
+  --cv-accent-ink: #ffffff;
+  --cv-accent-soft: #fbe9e2;
+  --cv-gold: #a07731;
+  --cv-gold-soft: #f3e9d1;
+  --cv-chip-bg: #1a1614;
+  --cv-chip-ink: #fbf6ee;
+  --cv-sale-bg: #c43823;
+  --cv-sale-ink: #ffffff;
+  --cv-hero-bg: #c43823;
+  --cv-hero-ink: #fbf6ee;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--cv-bg);
+  color: var(--cv-ink);
+  font-family: Inter, ui-sans-serif, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Smooth scrolling inside phone frame */
+.cv-scroll {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbars on horizontal scroll containers */
+.cv-scroll-x {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.cv-scroll-x::-webkit-scrollbar {
+  display: none;
+}
+
+/* Range input styling */
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--cv-line);
+  outline: none;
+}
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--cv-ink);
+  cursor: pointer;
+}
+input[type='range']::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: none;
+  border-radius: 50%;
+  background: var(--cv-ink);
+  cursor: pointer;
+}
+
+/* Carousel snap */
+.snap-x-mandatory {
+  scroll-snap-type: x mandatory;
+}
+.snap-start {
+  scroll-snap-align: start;
+}
