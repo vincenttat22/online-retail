@@ -23,7 +23,7 @@ export default function CVTabBar() {
 
   return (
     <div
-      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] pb-7 pt-2 flex justify-around items-center z-30"
+      className="md:hidden fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] pb-7 pt-2 flex justify-around items-center z-30"
       style={{ background: `linear-gradient(to top, var(--cv-bg) 70%, transparent)` }}
     >
       {TABS.map((t) => {

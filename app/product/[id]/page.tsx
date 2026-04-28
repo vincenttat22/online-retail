@@ -1,5 +1,6 @@
 import { PRODUCTS } from '@/lib/data'
 import ProductDetailScreen from '@/components/screens/ProductDetailScreen'
+import DesktopDetailScreen from '@/components/screens/desktop/DesktopDetailScreen'
 import SettingsPanel from '@/components/ui/SettingsPanel'
 
 export async function generateStaticParams() {
@@ -13,9 +14,21 @@ interface Props {
 export default async function ProductPage({ params }: Props) {
   const { id } = await params
   const productId = Number(id)
+
   return (
     <>
-      <ProductDetailScreen productId={productId} />
+      {/* Mobile */}
+      <div className="md:hidden">
+        <div className="mx-auto max-w-[430px] relative">
+          <ProductDetailScreen productId={productId} />
+        </div>
+      </div>
+
+      {/* Tablet / Desktop */}
+      <div className="hidden md:block">
+        <DesktopDetailScreen productId={productId} />
+      </div>
+
       <SettingsPanel />
     </>
   )

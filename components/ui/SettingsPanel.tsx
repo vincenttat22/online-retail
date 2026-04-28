@@ -18,10 +18,10 @@ export default function SettingsPanel() {
 
   return (
     <>
-      {/* Floating trigger */}
+      {/* Floating trigger — sits above tab bar on mobile, bottom-right on desktop */}
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-24 right-4 z-40 w-11 h-11 rounded-full flex items-center justify-center shadow-lg transition-transform active:scale-95"
+        className="fixed bottom-24 md:bottom-8 right-4 md:right-8 z-40 w-11 h-11 rounded-full flex items-center justify-center shadow-lg transition-transform active:scale-95"
         style={{ background: 'var(--cv-surface)', color: 'var(--cv-ink)', border: '1px solid var(--cv-line)' }}
         aria-label="Settings"
       >

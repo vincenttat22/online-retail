@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { ThemeProvider } from '@/context/ThemeContext'
+import CVTopNav from '@/components/ui/CVTopNav'
 
 export const metadata: Metadata = {
   title: 'CV Shop · 严选小铺',
@@ -29,9 +30,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ThemeProvider>
           <div className="min-h-screen bg-cv-bg">
-            <div className="mx-auto max-w-[430px] min-h-screen relative bg-cv-bg">
-              {children}
+            {/* Top nav: tablet & desktop only */}
+            <div className="hidden md:block">
+              <CVTopNav />
             </div>
+            {children}
           </div>
         </ThemeProvider>
       </body>
