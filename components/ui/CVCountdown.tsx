@@ -3,12 +3,13 @@
 import { useState, useEffect } from 'react'
 
 function useCountdown(targetMs: number) {
-  const [now, setNow] = useState(Date.now())
+  const [now, setNow] = useState<number | null>(null)
   useEffect(() => {
+    setNow(Date.now())
     const id = setInterval(() => setNow(Date.now()), 1000)
     return () => clearInterval(id)
   }, [])
-  const diff = Math.max(0, targetMs - now)
+  const diff = now === null ? 0 : Math.max(0, targetMs - now)
   const h = String(Math.floor(diff / 3.6e6)).padStart(2, '0')
   const m = String(Math.floor((diff % 3.6e6) / 6e4)).padStart(2, '0')
   const s = String(Math.floor((diff % 6e4) / 1000)).padStart(2, '0')
