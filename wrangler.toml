@@ -1,0 +1,24 @@
+"$schema" = "./node_modules/wrangler/config-schema.json"
+main = ".open-next/worker.js"
+name = "online-store"
+compatibility_date = "2026-04-19"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
+
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "online-shop"
+
+[env.production]
+vars = { ENVIRONMENT = "production" }
+
+[vars]
+RESEND_FROM = "no-reply@vincenttat.com"
+AUTH_SECRET = "5a2c9b7e4e1b6c4d3a0f9a7d1c8e2b4f7c6a9d2e5f1b3c8a4d6e9f0b1c2d3e4f0a6c8b9d1e2f3a4b5c6d7e8f9a0b1c2"
+UPSTASH_REDIS_REST_URL = "https://usable-moth-105568.upstash.io"
+CF_R2_BUCKET = "onlineshop"
+OPENAI_MODEL = "gpt-5.4-nano"
+AI_PROVIDER = "openai"
