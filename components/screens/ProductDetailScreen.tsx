@@ -4,7 +4,6 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useTheme } from '@/context/ThemeContext'
-import { PRODUCTS } from '@/lib/data'
 import { CATEGORIES, toneFor } from '@/lib/tokens'
 import CVPlaceholder from '@/components/ui/CVPlaceholder'
 import CVDiscBadge from '@/components/ui/CVDiscBadge'
@@ -12,19 +11,19 @@ import CVProductCard from '@/components/ui/CVProductCard'
 import CVCountdown from '@/components/ui/CVCountdown'
 import CVWeChatCTA from '@/components/ui/CVWeChatCTA'
 import CVIcon from '@/components/ui/CVIcon'
+import type { Product } from '@/lib/types'
 
 const COUNTDOWN_TARGET = Date.now() + 6 * 3600 * 1000 + 12 * 60 * 1000
 
 interface ProductDetailScreenProps {
-  productId: number
+  product: Product
+  relatedProducts: Product[]
 }
 
-export default function ProductDetailScreen({ productId }: ProductDetailScreenProps) {
+export default function ProductDetailScreen({ product: p, relatedProducts: related }: ProductDetailScreenProps) {
   const { theme, fx } = useTheme()
   const router = useRouter()
-  const p = PRODUCTS.find((x) => x.id === productId) ?? PRODUCTS[0]
   const final = p.disc ? Math.round(p.price * (100 - p.disc)) / 100 : p.price
-  const related = PRODUCTS.filter((x) => x.cat === p.cat && x.id !== p.id).slice(0, 4)
   const [imgIdx, setImgIdx] = useState(0)
   const catData = CATEGORIES.find((c) => c.id === p.cat)
 

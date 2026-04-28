@@ -2,7 +2,7 @@ export interface Product {
   id: number
   zh: string
   en: string
-  cat: 'snack' | 'beauty' | 'daily'
+  cat?: 'snack' | 'beauty' | 'daily'
   price: number
   unit: string
   desc: string

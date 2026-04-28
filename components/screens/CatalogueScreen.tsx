@@ -4,20 +4,21 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useTheme } from '@/context/ThemeContext'
-import { PRODUCTS } from '@/lib/data'
 import { CATEGORIES, toneFor } from '@/lib/tokens'
 import CVChip from '@/components/ui/CVChip'
 import CVProductCard from '@/components/ui/CVProductCard'
 import CVIcon from '@/components/ui/CVIcon'
+import type { Product } from '@/lib/types'
 
 type SortKey = 'hot' | 'price' | 'priceDesc' | 'disc'
 
 interface CatalogueScreenProps {
+  products: Product[]
   initialCat?: string
   initialQ?: string
 }
 
-export default function CatalogueScreen({ initialCat = 'all', initialQ = '' }: CatalogueScreenProps) {
+export default function CatalogueScreen({ products, initialCat = 'all', initialQ = '' }: CatalogueScreenProps) {
   const { theme, fx } = useTheme()
   const router = useRouter()
   const [q, setQ] = useState(initialQ)
@@ -26,7 +27,7 @@ export default function CatalogueScreen({ initialCat = 'all', initialQ = '' }: C
   const [priceMax, setPriceMax] = useState(200)
   const [sort, setSort] = useState<SortKey>('hot')
 
-  const filtered = PRODUCTS.filter((p) => {
+  const filtered = products.filter((p) => {
     if (cat !== 'all' && p.cat !== cat) return false
     if (discOnly && !p.disc) return false
     if (p.price > priceMax) return false
