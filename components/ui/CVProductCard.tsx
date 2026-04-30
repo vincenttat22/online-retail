@@ -57,12 +57,12 @@ export default function CVProductCard({ p, fx, tone = 'a', onClick }: CVProductC
         </div>
 
         {/* heart */}
-        <div
+        {/* <div
           className="absolute top-2 right-2 w-7 h-7 rounded-full flex items-center justify-center"
           style={{ background: 'rgba(255,255,255,0.85)', color: 'var(--cv-ink-soft)' }}
         >
           <CVIcon name="heart" size={14} />
-        </div>
+        </div> */}
 
         {/* sale ribbon */}
         {showRibbon && (
@@ -85,7 +85,7 @@ export default function CVProductCard({ p, fx, tone = 'a', onClick }: CVProductC
 
       <div className="px-3 pt-2.5 pb-3 flex flex-col gap-1">
         <div
-          className="text-[13px] font-medium leading-snug line-clamp-2"
+          className="text-[16px] font-medium leading-snug line-clamp-2"
           style={{ color: 'var(--cv-ink)' }}
         >
           {p.zh}

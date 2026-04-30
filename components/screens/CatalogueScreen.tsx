@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useTheme } from '@/context/ThemeContext'
 import { CATEGORIES, toneFor } from '@/lib/tokens'
 import CVChip from '@/components/ui/CVChip'
@@ -19,6 +20,7 @@ interface CatalogueScreenProps {
 
 export default function CatalogueScreen({ products, initialCat = 'all', initialQ = '' }: CatalogueScreenProps) {
   const { theme, fx } = useTheme()
+  const router = useRouter()
   const productMaxPrice = Math.max(20, ...products.map((p) => Math.ceil(p.price)))
   const [q, setQ] = useState(initialQ)
   const [cat, setCat] = useState(initialCat)
@@ -149,7 +151,7 @@ export default function CatalogueScreen({ products, initialCat = 'all', initialQ
               </div>
             ) : (
               filtered.map((p) => (
-                <CVProductCard key={p.id} p={p} fx={fx} tone={toneFor(p.id)} />
+                <CVProductCard key={p.id} p={p} fx={fx} tone={toneFor(p.id)} onClick={() => router.push(`/product/${p.id}`)} />
               ))
             )}
           </div>

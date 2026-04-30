@@ -85,14 +85,6 @@ export default function ProductDetailScreen({ product: p, relatedProducts: relat
                 <CVIcon name="chev-l" size={18} />
               </Link>
             </div>
-            <div className="md:hidden absolute top-14 right-4 flex gap-2">
-              <button className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(8px)', color: theme.ink }}>
-                <CVIcon name="heart" size={18} />
-              </button>
-              <button className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(8px)', color: theme.ink }}>
-                <CVIcon name="cart" size={18} />
-              </button>
-            </div>
 
             {/* Mobile image dots */}
             {images.length > 0 && (
@@ -194,13 +186,7 @@ export default function ProductDetailScreen({ product: p, relatedProducts: relat
 
       {/* ── MOBILE STICKY CTA (hidden on desktop, desktop uses inline buttons above) ── */}
       <div className="md:hidden fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] px-4 pt-3 pb-8 flex gap-2 z-30" style={{ background: theme.bg, borderTop: `0.5px solid ${theme.line}` }}>
-        <button className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style={{ background: theme.surface, color: theme.ink }}>
-          <CVIcon name="cart" size={18} />
-        </button>
-        <button className="flex-1 px-3.5 rounded-xl text-[13px] font-semibold cursor-pointer" style={{ border: `1.5px solid ${theme.ink}`, background: 'transparent', color: theme.ink }}>
-          加入收藏
-        </button>
-        <CVWeChatCTA label="微信下单" />
+        <CVWeChatCTA full label="微信下单" />
       </div>
     </div>
   )
