@@ -12,7 +12,6 @@ export const PRODUCTS: Product[] = [
   { id: 9,  zh: '亚麻洗碗布 6条',   en: 'Linen Dish Cloths ×6',     cat: 'HOUSEHOLD',  price: 29,  unit: '/组', desc: '吸水快干 · 不沾油',               disc: 0,  badge: '新品' },
   { id: 10, zh: '山茶花润唇膏',     en: 'Camellia Lip Balm',        cat: 'BEAUTY_HEALTH', price: 52,  unit: '/支', desc: '天然滋养 · 4.5g',                 disc: 15 },
   { id: 11, zh: '低钠竹盐',         en: 'Low-Sodium Bamboo Salt',   cat: 'HOUSEHOLD',  price: 36,  unit: '/罐', desc: '九次焙烧 · 380g',                 disc: 0 },
-  { id: 12, zh: '陈皮乌梅汤料',     en: 'Aged Plum Soup Pack',      cat: 'SNACKS',  price: 58,  unit: '/包', desc: '古方配伍 · 三人份×6',             disc: 30, badge: '限时' },
 ]
 
 export const BUNDLES: Bundle[] = [
