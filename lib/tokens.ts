@@ -84,6 +84,7 @@ export const CATEGORIES = [
   { id: 'all',           zh: '全部',     en: 'All' },
   { id: 'MEAT_SEAFOOD',  zh: '肉类海鲜',  en: 'Meat & Seafood' },
   { id: 'SNACKS',        zh: '零食',     en: 'Snacks' },
+  { id: 'FROZEN_FOOD',   zh: '冷冻食品',  en: 'Frozen Food' },
   { id: 'HOUSEHOLD',     zh: '日用品',   en: 'Household' },
   { id: 'BEAUTY_HEALTH', zh: '美容保健',  en: 'Beauty & Health' },
   { id: 'OTHER',         zh: '其他',     en: 'Other' },
