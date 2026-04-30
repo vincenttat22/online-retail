@@ -148,7 +148,7 @@ export default function ProductDetailScreen({ product: p, relatedProducts: relat
           </div>
 
           {/* Description */}
-          <p className="mt-4 md:mt-5 text-[13px] md:text-[14px] leading-relaxed" style={{ color: theme.inkSoft }}>
+          <p className="mt-4 md:mt-5 text-[13px] md:text-[14px] leading-relaxed whitespace-pre-wrap" style={{ color: theme.inkSoft }}>
             {p.desc}
           </p>
 
