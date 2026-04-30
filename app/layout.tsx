@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import { Suspense } from 'react'
 import './globals.css'
 import { ThemeProvider } from '@/context/ThemeContext'
 import CVTopNav from '@/components/ui/CVTopNav'
@@ -32,7 +33,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="min-h-screen bg-cv-bg">
             {/* Top nav: tablet & desktop only */}
             <div className="hidden md:block">
-              <CVTopNav />
+              <Suspense fallback={null}>
+                <CVTopNav />
+              </Suspense>
             </div>
             {children}
           </div>

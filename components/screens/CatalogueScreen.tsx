@@ -1,8 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useTheme } from '@/context/ThemeContext'
 import { CATEGORIES, toneFor } from '@/lib/tokens'
 import CVChip from '@/components/ui/CVChip'
@@ -10,7 +9,7 @@ import CVProductCard from '@/components/ui/CVProductCard'
 import CVIcon from '@/components/ui/CVIcon'
 import type { Product } from '@/lib/types'
 
-type SortKey = 'hot' | 'price' | 'priceDesc' | 'disc'
+type SortKey = 'price' | 'priceDesc'
 
 interface CatalogueScreenProps {
   products: Product[]
@@ -20,23 +19,28 @@ interface CatalogueScreenProps {
 
 export default function CatalogueScreen({ products, initialCat = 'all', initialQ = '' }: CatalogueScreenProps) {
   const { theme, fx } = useTheme()
-  const router = useRouter()
+  const productMaxPrice = Math.max(20, ...products.map((p) => Math.ceil(p.price)))
   const [q, setQ] = useState(initialQ)
   const [cat, setCat] = useState(initialCat)
-  const [discOnly, setDiscOnly] = useState(false)
-  const [priceMax, setPriceMax] = useState(200)
-  const [sort, setSort] = useState<SortKey>('hot')
+  const [priceMax, setPriceMax] = useState(productMaxPrice)
+  const [sort, setSort] = useState<SortKey>('price')
+
+  useEffect(() => {
+    setQ(initialQ)
+  }, [initialQ])
+
+  useEffect(() => {
+    setCat(initialCat)
+  }, [initialCat])
 
   const filtered = products.filter((p) => {
     if (cat !== 'all' && p.cat !== cat) return false
-    if (discOnly && !p.disc) return false
     if (p.price > priceMax) return false
     if (q && !(p.zh.includes(q) || p.en.toLowerCase().includes(q.toLowerCase()))) return false
     return true
   }).sort((a, b) => {
     if (sort === 'price') return a.price - b.price
     if (sort === 'priceDesc') return b.price - a.price
-    if (sort === 'disc') return b.disc - a.disc
     return 0
   })
 
@@ -70,18 +74,12 @@ export default function CatalogueScreen({ products, initialCat = 'all', initialQ
 
           <div className="font-mono text-[10px] tracking-[2px] mb-2.5" style={{ color: theme.inkMuted }}>PRICE · 价格</div>
           <div className="mb-6">
-            <input type="range" min={20} max={200} value={priceMax} onChange={(e) => setPriceMax(Number(e.target.value))} className="w-full" style={{ accentColor: theme.accent }} />
+            <input type="range" min={0} max={productMaxPrice} value={priceMax} onChange={(e) => setPriceMax(Number(e.target.value))} className="w-full" style={{ accentColor: theme.accent }} />
             <div className="flex justify-between mt-1 text-[11px] font-sans" style={{ color: theme.inkSoft }}>
-              <span>$20</span>
+              <span>$0</span>
               <span className="font-semibold" style={{ color: theme.ink }}>≤ ${priceMax}</span>
             </div>
           </div>
-
-          <div className="font-mono text-[10px] tracking-[2px] mb-2.5" style={{ color: theme.inkMuted }}>FILTER</div>
-          <label className="flex items-center gap-2 text-[13px] cursor-pointer" style={{ color: theme.inkSoft }}>
-            <input type="checkbox" checked={discOnly} onChange={(e) => setDiscOnly(e.target.checked)} style={{ accentColor: theme.accent }} />
-            只看折扣商品
-          </label>
         </aside>
 
         {/* ── MAIN COLUMN ── */}
@@ -116,8 +114,7 @@ export default function CatalogueScreen({ products, initialCat = 'all', initialQ
             </div>
             {/* Mobile secondary filters */}
             <div className="flex gap-1.5 mt-2 overflow-x-auto cv-scroll-x pb-1">
-              <CVChip active={discOnly} onClick={() => setDiscOnly(!discOnly)}>只看折扣</CVChip>
-              {([['hot', '热度'], ['price', '价格 ↑'], ['priceDesc', '价格 ↓'], ['disc', '折扣']] as const).map(([k, l]) => (
+              {([['price', '价格 ↑'], ['priceDesc', '价格 ↓']] as const).map(([k, l]) => (
                 <CVChip key={k} active={sort === k} onClick={() => setSort(k as SortKey)}>{l}</CVChip>
               ))}
             </div>
@@ -132,7 +129,7 @@ export default function CatalogueScreen({ products, initialCat = 'all', initialQ
               </span>
             </h1>
             <div className="flex gap-1.5 flex-wrap">
-              {([['hot', '热度'], ['price', '价格 ↑'], ['priceDesc', '价格 ↓'], ['disc', '折扣']] as const).map(([k, l]) => (
+              {([['price', '价格 ↑'], ['priceDesc', '价格 ↓']] as const).map(([k, l]) => (
                 <CVChip key={k} active={sort === k} onClick={() => setSort(k as SortKey)}>{l}</CVChip>
               ))}
             </div>
@@ -152,7 +149,7 @@ export default function CatalogueScreen({ products, initialCat = 'all', initialQ
               </div>
             ) : (
               filtered.map((p) => (
-                <CVProductCard key={p.id} p={p} fx={fx} tone={toneFor(p.id)} onClick={() => router.push(`/product/${p.id}`)} />
+                <CVProductCard key={p.id} p={p} fx={fx} tone={toneFor(p.id)} />
               ))
             )}
           </div>

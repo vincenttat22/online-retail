@@ -1,29 +1,44 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { useTheme } from '@/context/ThemeContext'
 import CVIcon from './CVIcon'
 
 const NAV_LINKS = [
-  { label: '首页',     href: '/' },
   { label: '全部商品', href: '/catalogue' },
-  { label: '优惠专区', href: '/promotions' },
-  { label: '组合套装', href: '/promotions' },
-  { label: '关于我们', href: '/' },
 ]
 
 export default function CVTopNav() {
   const { theme } = useTheme()
   const pathname = usePathname()
   const router = useRouter()
-  const [q, setQ] = useState('')
+  const searchParams = useSearchParams()
+  const [q, setQ] = useState(searchParams.get('q') ?? '')
+
+  useEffect(() => {
+    setQ(searchParams.get('q') ?? '')
+  }, [searchParams])
 
   const isActive = (href: string) => {
     if (href === '/' && pathname === '/') return true
     if (href !== '/' && pathname.startsWith(href)) return true
     return false
+  }
+
+  const handleChange = (value: string) => {
+    setQ(value)
+    const params = new URLSearchParams(searchParams.toString())
+    if (value) params.set('q', value)
+    else params.delete('q')
+    const qs = params.toString()
+    const target = `/catalogue${qs ? `?${qs}` : ''}`
+    if (pathname === '/catalogue') {
+      router.replace(target, { scroll: false })
+    } else {
+      router.push(target)
+    }
   }
 
   const handleSearch = (e: React.FormEvent) => {
@@ -82,35 +97,24 @@ export default function CVTopNav() {
           <CVIcon name="search" size={14} stroke={theme.inkMuted} />
           <input
             value={q}
-            onChange={(e) => setQ(e.target.value)}
+            onChange={(e) => handleChange(e.target.value)}
             placeholder="搜索商品 · 红糖姜茶"
-            className="flex-1 bg-transparent border-0 outline-0 text-[12px]"
+            className="flex-1 bg-transparent border-0 outline-none focus:outline-none focus:ring-0 text-[12px] min-w-0"
             style={{ color: theme.ink, fontFamily: 'inherit' }}
           />
+          {q && (
+            <button
+              type="button"
+              onClick={() => handleChange('')}
+              className="p-0 border-0 bg-transparent cursor-pointer shrink-0"
+              style={{ color: theme.inkMuted }}
+            >
+              <CVIcon name="x" size={12} />
+            </button>
+          )}
         </div>
       </form>
 
-      {/* Icon actions */}
-      <div className="flex gap-1.5 shrink-0">
-        <button
-          className="w-9 h-9 rounded-full flex items-center justify-center"
-          style={{ background: theme.surface, color: theme.ink }}
-        >
-          <CVIcon name="heart" size={16} />
-        </button>
-        <button
-          className="w-9 h-9 rounded-full flex items-center justify-center"
-          style={{ background: theme.surface, color: theme.ink }}
-        >
-          <CVIcon name="cart" size={16} />
-        </button>
-        <button
-          className="hidden xl:flex w-9 h-9 rounded-full items-center justify-center"
-          style={{ background: theme.surface, color: theme.ink }}
-        >
-          <CVIcon name="user" size={16} />
-        </button>
-      </div>
     </header>
   )
 }

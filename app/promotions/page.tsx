@@ -1,13 +1,5 @@
-import PromotionsScreen from '@/components/screens/PromotionsScreen'
-import CVTabBar from '@/components/ui/CVTabBar'
-import SettingsPanel from '@/components/ui/SettingsPanel'
+import { redirect } from 'next/navigation'
 
 export default function PromotionsPage() {
-  return (
-    <>
-      <PromotionsScreen />
-      <CVTabBar />
-      <SettingsPanel />
-    </>
-  )
+  redirect('/catalogue')
 }
