@@ -29,6 +29,14 @@ export default function ProductDetailScreen({ product: p, relatedProducts: relat
   const images = p.images || []
   const currentImage = images[imgIdx]
   const maxImages = Math.max(images.length, 4)
+  const packDisplay = p.packSize && p.packUnit
+    ? `${p.packSize}${p.packUnit}${p.unit ? ` / ${p.unit}` : ''}`
+    : p.unit ?? null
+  const unitSuffix = p.packSize && p.packUnit
+    ? `/ ${p.unit ?? '件'} · ${p.packSize}${p.packUnit}`
+    : p.unit
+    ? `/ ${p.unit}`
+    : null
 
   return (
     <div className="pb-32 md:pb-0 animate-cv-fade">
@@ -137,7 +145,7 @@ export default function ProductDetailScreen({ product: p, relatedProducts: relat
                 <span style={{ fontSize: '0.5em' }}>$</span>{final}
               </span>
               {p.disc > 0 && <span className="font-sans text-[13px] md:text-[15px] line-through" style={{ color: theme.inkMuted }}>${p.price}</span>}
-              <span className="text-[11px] md:text-[12px]" style={{ color: theme.inkMuted }}>{p.unit}</span>
+              {unitSuffix && <span className="text-[11px] md:text-[12px]" style={{ color: theme.inkMuted }}>{unitSuffix}</span>}
             </div>
             {fx.countdown && p.disc > 0 && (
               <div className="mt-2 md:mt-3 flex items-center gap-1.5 md:gap-2">
@@ -146,6 +154,16 @@ export default function ProductDetailScreen({ product: p, relatedProducts: relat
               </div>
             )}
           </div>
+
+          {/* Spec strip */}
+          {packDisplay && (
+            <div className="mt-3 p-3.5 md:p-4 rounded-2xl text-[12px] md:text-[13px]" style={{ background: theme.surface, border: `0.5px solid ${theme.line}` }}>
+              <div className="flex justify-between py-1">
+                <span style={{ color: theme.inkMuted }}>规格</span>
+                <span className="font-medium" style={{ color: theme.ink }}>{packDisplay}</span>
+              </div>
+            </div>
+          )}
 
           {/* Description */}
           <p className="mt-4 md:mt-5 text-[13px] md:text-[14px] leading-relaxed whitespace-pre-wrap" style={{ color: theme.inkSoft }}>

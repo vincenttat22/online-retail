@@ -11,7 +11,9 @@ export interface Product {
   en: string
   cat?: 'MEAT_SEAFOOD' | 'SNACKS' | 'HOUSEHOLD' | 'BEAUTY_HEALTH' | 'OTHER'
   price: number
-  unit: string
+  unit?: string
+  packSize?: number
+  packUnit?: string
   desc: string
   disc: number
   badge?: string
