@@ -85,7 +85,7 @@ export default function PromotionsScreen() {
                     <div className="font-sans text-[11px] md:text-[12px] mt-0.5" style={{ color: theme.inkMuted }}>{b.en}</div>
                   </div>
                   <div className="px-2.5 md:px-3 py-1.5 rounded-lg text-xs md:text-[13px] font-bold whitespace-nowrap" style={{ background: theme.accentSoft, color: theme.accent }}>
-                    省 ¥{save}
+                    省 ${save}
                   </div>
                 </div>
 
@@ -105,8 +105,8 @@ export default function PromotionsScreen() {
                 {/* Bundle footer */}
                 <div className="px-4 md:px-5 xl:px-6 py-3.5 md:py-4 flex justify-between items-center" style={{ borderTop: `0.5px solid ${theme.line}` }}>
                   <div>
-                    <span className="font-sans font-bold text-[22px] md:text-[22px] xl:text-[28px]" style={{ color: theme.accent }}>¥{b.price}</span>
-                    <span className="font-sans text-xs md:text-[13px] line-through ml-2" style={{ color: theme.inkMuted }}>¥{b.orig}</span>
+                    <span className="font-sans font-bold text-[22px] md:text-[22px] xl:text-[28px]" style={{ color: theme.accent }}>${b.price}</span>
+                    <span className="font-sans text-xs md:text-[13px] line-through ml-2" style={{ color: theme.inkMuted }}>${b.orig}</span>
                   </div>
                   <CVWeChatCTA label="询单" />
                 </div>

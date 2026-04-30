@@ -17,6 +17,7 @@ interface CVProductCardProps {
 
 export default function CVProductCard({ p, fx, tone = 'a', onClick }: CVProductCardProps) {
   const showRibbon = fx.ribbon && p.disc >= 20
+  const primaryImage = p.images?.find(img => img.isPrimary) || p.images?.[0]
 
   return (
     <button
@@ -28,7 +29,15 @@ export default function CVProductCard({ p, fx, tone = 'a', onClick }: CVProductC
       }}
     >
       <div className="relative">
-        <CVPlaceholder label={`${p.id < 10 ? '0' + p.id : p.id} · ${p.en}`} tone={tone} ratio={1} />
+        {primaryImage ? (
+          <img
+            src={`/api/products/${p.id}/images/${primaryImage.id}`}
+            alt={primaryImage.altText || p.zh}
+            className="w-full aspect-square object-cover bg-gray-200"
+          />
+        ) : (
+          <CVPlaceholder label={`${p.en}`} tone={tone} ratio={1} />
+        )}
 
         {/* top-left chips */}
         <div className="absolute top-2 left-2 flex flex-col items-start gap-1">

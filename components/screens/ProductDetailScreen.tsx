@@ -26,6 +26,9 @@ export default function ProductDetailScreen({ product: p, relatedProducts: relat
   const final = p.disc ? Math.round(p.price * (100 - p.disc)) / 100 : p.price
   const [imgIdx, setImgIdx] = useState(0)
   const catData = CATEGORIES.find((c) => c.id === p.cat)
+  const images = p.images || []
+  const currentImage = images[imgIdx]
+  const maxImages = Math.max(images.length, 4)
 
   return (
     <div className="pb-32 md:pb-0 animate-cv-fade">
@@ -34,8 +37,17 @@ export default function ProductDetailScreen({ product: p, relatedProducts: relat
       <div className="hidden md:flex items-center gap-1.5 text-[12px] px-6 xl:px-10 pt-6 xl:pt-9 mb-5" style={{ color: theme.inkMuted }}>
         <Link href="/" className="hover:underline" style={{ color: 'inherit' }}>首页</Link>
         <CVIcon name="chev-r" size={11} />
-        <Link href={`/catalogue?cat=${p.cat}`} className="hover:underline" style={{ color: 'inherit' }}>{catData?.zh ?? p.cat}</Link>
-        <CVIcon name="chev-r" size={11} />
+        {p.cat && catData ? (
+          <>
+            <Link href={`/catalogue?cat=${p.cat}`} className="hover:underline" style={{ color: 'inherit' }}>{catData.zh}</Link>
+            <CVIcon name="chev-r" size={11} />
+          </>
+        ) : (
+          <>
+            <Link href="/catalogue" className="hover:underline" style={{ color: 'inherit' }}>全部商品</Link>
+            <CVIcon name="chev-r" size={11} />
+          </>
+        )}
         <span style={{ color: theme.ink }}>{p.zh}</span>
       </div>
 
@@ -49,7 +61,15 @@ export default function ProductDetailScreen({ product: p, relatedProducts: relat
         <div>
           {/* Main image */}
           <div className="relative md:rounded-[18px] md:overflow-hidden">
-            <CVPlaceholder label={`${p.en} · ${imgIdx + 1}/4`} tone={toneFor(p.id + imgIdx)} ratio={1} />
+            {currentImage ? (
+              <img
+                src={`/api/products/${p.id}/images/${currentImage.id}`}
+                alt={currentImage.altText || p.zh}
+                className="w-full aspect-square object-cover bg-gray-200"
+              />
+            ) : (
+              <CVPlaceholder label={`${p.en} · ${imgIdx + 1}/${maxImages}`} tone={toneFor(p.id + imgIdx)} ratio={1} />
+            )}
 
             {/* Mobile nav overlay */}
             <div className="md:hidden absolute top-14 left-4">
@@ -67,25 +87,33 @@ export default function ProductDetailScreen({ product: p, relatedProducts: relat
             </div>
 
             {/* Mobile image dots */}
-            <div className="md:hidden absolute bottom-3 left-0 right-0 flex justify-center gap-1.5">
-              {[0, 1, 2, 3].map((i) => (
-                <button key={i} onClick={() => setImgIdx(i)} className="h-1.5 rounded-full border-0 p-0 cursor-pointer transition-all duration-200"
-                  style={{ width: i === imgIdx ? 18 : 6, background: i === imgIdx ? theme.ink : 'rgba(255,255,255,0.85)' }}
-                />
-              ))}
-            </div>
+            {images.length > 0 && (
+              <div className="md:hidden absolute bottom-3 left-0 right-0 flex justify-center gap-1.5">
+                {images.map((_, i) => (
+                  <button key={i} onClick={() => setImgIdx(i)} className="h-1.5 rounded-full border-0 p-0 cursor-pointer transition-all duration-200"
+                    style={{ width: i === imgIdx ? 18 : 6, background: i === imgIdx ? theme.ink : 'rgba(255,255,255,0.85)' }}
+                  />
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Desktop thumbnail strip */}
-          <div className="hidden md:grid grid-cols-4 gap-2 mt-3">
-            {[0, 1, 2, 3].map((i) => (
-              <button key={i} onClick={() => setImgIdx(i)} className="p-0 rounded-[10px] overflow-hidden cursor-pointer bg-transparent"
-                style={{ border: i === imgIdx ? `2px solid ${theme.ink}` : `1px solid ${theme.line}` }}
-              >
-                <CVPlaceholder label="" tone={toneFor(p.id + i)} ratio={1} />
-              </button>
-            ))}
-          </div>
+          {images.length > 0 && (
+            <div className="hidden md:grid gap-2 mt-3" style={{ gridTemplateColumns: `repeat(${Math.min(images.length, 4)}, 1fr)` }}>
+              {images.slice(0, 4).map((img, i) => (
+                <button key={i} onClick={() => setImgIdx(i)} className="p-0 rounded-[10px] overflow-hidden cursor-pointer bg-transparent"
+                  style={{ border: i === imgIdx ? `2px solid ${theme.ink}` : `1px solid ${theme.line}` }}
+                >
+                  <img
+                    src={`/api/products/${p.id}/images/${img.id}`}
+                    alt={img.altText || `${p.zh} - ${i + 1}`}
+                    className="w-full aspect-square object-cover bg-gray-200"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* ── PRODUCT INFO ── */}
@@ -106,9 +134,9 @@ export default function ProductDetailScreen({ product: p, relatedProducts: relat
           <div className="mt-3.5 p-3.5 md:p-5 rounded-2xl" style={{ background: theme.surface, border: `0.5px solid ${theme.line}` }}>
             <div className="flex items-baseline gap-2 md:gap-2.5">
               <span className="font-sans font-bold leading-none tracking-tight" style={{ color: theme.accent, fontSize: 'clamp(24px, 3vw, 40px)', letterSpacing: '-0.5px' }}>
-                <span style={{ fontSize: '0.5em' }}>¥</span>{final}
+                <span style={{ fontSize: '0.5em' }}>$</span>{final}
               </span>
-              {p.disc > 0 && <span className="font-sans text-[13px] md:text-[15px] line-through" style={{ color: theme.inkMuted }}>¥{p.price}</span>}
+              {p.disc > 0 && <span className="font-sans text-[13px] md:text-[15px] line-through" style={{ color: theme.inkMuted }}>${p.price}</span>}
               <span className="text-[11px] md:text-[12px]" style={{ color: theme.inkMuted }}>{p.unit}</span>
             </div>
             {fx.countdown && p.disc > 0 && (
@@ -121,29 +149,11 @@ export default function ProductDetailScreen({ product: p, relatedProducts: relat
 
           {/* Description */}
           <p className="mt-4 md:mt-5 text-[13px] md:text-[14px] leading-relaxed" style={{ color: theme.inkSoft }}>
-            {p.desc}。精选优质原料，严格把控品质。我们与本地工坊长期合作，确保每一件商品都符合健康、环保的标准。
+            {p.desc}
           </p>
-
-          {/* Spec table */}
-          <div className="mt-4 p-3.5 md:p-[18px] rounded-2xl text-[12px] md:text-[13px]" style={{ background: theme.surface, border: `0.5px solid ${theme.line}` }}>
-            {[
-              ['品类', catData?.zh ?? p.cat],
-              ['规格', p.unit.replace('/', '每') + '装'],
-              ['产地', '中国 · 浙江'],
-              ['保质期', '12个月'],
-            ].map(([k, v], i, arr) => (
-              <div key={k} className="flex justify-between py-2 md:py-2.5" style={{ borderBottom: i < arr.length - 1 ? `0.5px solid ${theme.line}` : 'none' }}>
-                <span style={{ color: theme.inkMuted }}>{k}</span>
-                <span className="font-medium" style={{ color: theme.ink }}>{v}</span>
-              </div>
-            ))}
-          </div>
 
           {/* Desktop CTA buttons (inline, not fixed) */}
           <div className="hidden md:flex gap-2.5 mt-5">
-            <button className="flex-1 py-3.5 px-4 rounded-xl text-[14px] font-semibold cursor-pointer" style={{ border: `1.5px solid ${theme.ink}`, background: 'transparent', color: theme.ink }}>
-              加入购物车
-            </button>
             <CVWeChatCTA full label="微信下单咨询" />
           </div>
         </div>

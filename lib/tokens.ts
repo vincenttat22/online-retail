@@ -81,10 +81,12 @@ export function promoFx(level: number): PromoFx {
 }
 
 export const CATEGORIES = [
-  { id: 'all',    zh: '全部',   en: 'All' },
-  { id: 'snack',  zh: '零食茶饮', en: 'Snacks & Tea' },
-  { id: 'beauty', zh: '美妆护肤', en: 'Beauty' },
-  { id: 'daily',  zh: '日用百货', en: 'Daily Goods' },
+  { id: 'all',           zh: '全部',     en: 'All' },
+  { id: 'MEAT_SEAFOOD',  zh: '肉类海鲜',  en: 'Meat & Seafood' },
+  { id: 'SNACKS',        zh: '零食',     en: 'Snacks' },
+  { id: 'HOUSEHOLD',     zh: '日用品',   en: 'Household' },
+  { id: 'BEAUTY_HEALTH', zh: '美容保健',  en: 'Beauty & Health' },
+  { id: 'OTHER',         zh: '其他',     en: 'Other' },
 ] as const
 
 export const PLACEHOLDER_TONES = ['a', 'b', 'c', 'd', 'e', 'f'] as const

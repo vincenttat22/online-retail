@@ -12,7 +12,7 @@ export default function CVPriceTag({ price, disc = 0, large }: CVPriceTagProps) 
         className={`font-sans font-bold tracking-tight ${large ? 'text-2xl' : 'text-[15px]'}`}
         style={{ color: 'var(--cv-ink)', letterSpacing: '-0.3px' }}
       >
-        <span className={large ? 'text-[13px]' : 'text-[10px]'}>¥</span>
+        <span className={large ? 'text-[13px]' : 'text-[10px]'}>$</span>
         {final}
       </span>
       {disc > 0 && (
@@ -20,7 +20,7 @@ export default function CVPriceTag({ price, disc = 0, large }: CVPriceTagProps) 
           className={`font-sans line-through ${large ? 'text-[13px]' : 'text-[11px]'}`}
           style={{ color: 'var(--cv-ink-muted)', textDecorationThickness: '1px' }}
         >
-          ¥{price}
+          ${price}
         </span>
       )}
     </div>

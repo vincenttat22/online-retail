@@ -1,13 +1,21 @@
+export interface ProductImage {
+  id: number
+  r2Url: string
+  altText?: string
+  isPrimary?: boolean
+}
+
 export interface Product {
   id: number
   zh: string
   en: string
-  cat?: 'snack' | 'beauty' | 'daily'
+  cat?: 'MEAT_SEAFOOD' | 'SNACKS' | 'HOUSEHOLD' | 'BEAUTY_HEALTH' | 'OTHER'
   price: number
   unit: string
   desc: string
   disc: number
   badge?: string
+  images?: ProductImage[]
 }
 
 export interface Bundle {
@@ -18,7 +26,7 @@ export interface Bundle {
   price: number
   orig: number
   tag: string
-  theme: string
+  theme: 'MEAT_SEAFOOD' | 'SNACKS' | 'HOUSEHOLD' | 'BEAUTY_HEALTH' | 'OTHER'
   member?: boolean
 }
 

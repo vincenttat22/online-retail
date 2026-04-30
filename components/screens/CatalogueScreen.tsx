@@ -72,8 +72,8 @@ export default function CatalogueScreen({ products, initialCat = 'all', initialQ
           <div className="mb-6">
             <input type="range" min={20} max={200} value={priceMax} onChange={(e) => setPriceMax(Number(e.target.value))} className="w-full" style={{ accentColor: theme.accent }} />
             <div className="flex justify-between mt-1 text-[11px] font-sans" style={{ color: theme.inkSoft }}>
-              <span>¥20</span>
-              <span className="font-semibold" style={{ color: theme.ink }}>≤ ¥{priceMax}</span>
+              <span>$20</span>
+              <span className="font-semibold" style={{ color: theme.ink }}>≤ ${priceMax}</span>
             </div>
           </div>
 

@@ -180,8 +180,8 @@ export default function HomeScreen() {
               <div className="font-serif text-[22px] font-bold mt-1 tracking-tight">{top.zh}</div>
               <div className="flex items-center gap-2.5 mt-2">
                 <span className="px-2.5 py-1 rounded font-sans text-xs font-bold" style={{ background: theme.accent, color: theme.accentInk }}>−{top.disc}%</span>
-                <span className="font-sans text-[18px] font-semibold">¥{Math.round(top.price * (100 - top.disc)) / 100}</span>
-                <span className="font-sans text-[13px] opacity-70 line-through">¥{top.price}</span>
+                <span className="font-sans text-[18px] font-semibold">${Math.round(top.price * (100 - top.disc)) / 100}</span>
+                <span className="font-sans text-[13px] opacity-70 line-through">${top.price}</span>
               </div>
             </div>
           </div>
@@ -196,7 +196,7 @@ export default function HomeScreen() {
             {BUNDLES.slice(0, 2).map((b) => (
               <Link key={b.id} href="/promotions" className="flex items-center gap-3 p-3 rounded-[18px]" style={{ background: theme.surface }}>
                 <div className="w-[78px] h-[78px] shrink-0">
-                  <CVPlaceholder label={b.tag} tone={b.theme === 'beauty' ? 'e' : b.theme === 'snack' ? 'b' : 'f'} ratio={1} rounded />
+                  <CVPlaceholder label={b.tag} tone={b.theme === 'BEAUTY_HEALTH' ? 'e' : b.theme === 'SNACKS' ? 'b' : 'f'} ratio={1} rounded />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex gap-1.5 mb-1">
@@ -205,8 +205,8 @@ export default function HomeScreen() {
                   </div>
                   <div className="font-serif text-[15px] font-bold leading-snug" style={{ color: theme.ink }}>{b.zh}</div>
                   <div className="flex gap-1.5 items-baseline mt-1">
-                    <span className="font-sans text-base font-bold" style={{ color: theme.accent }}>¥{b.price}</span>
-                    <span className="font-sans text-[11px] line-through" style={{ color: theme.inkMuted }}>¥{b.orig}</span>
+                    <span className="font-sans text-base font-bold" style={{ color: theme.accent }}>${b.price}</span>
+                    <span className="font-sans text-[11px] line-through" style={{ color: theme.inkMuted }}>${b.orig}</span>
                   </div>
                 </div>
                 <CVIcon name="chev-r" size={16} stroke={theme.inkSoft} />
@@ -227,7 +227,7 @@ export default function HomeScreen() {
                       </div>
                       <div className="font-serif font-bold leading-snug text-[16px] xl:text-[18px]" style={{ color: theme.ink }}>{b.zh}</div>
                     </div>
-                    <span className="px-2 py-1 rounded-md text-[11px] font-bold whitespace-nowrap" style={{ background: theme.accentSoft, color: theme.accent }}>省 ¥{b.orig - b.price}</span>
+                    <span className="px-2 py-1 rounded-md text-[11px] font-bold whitespace-nowrap" style={{ background: theme.accentSoft, color: theme.accent }}>省 ${b.orig - b.price}</span>
                   </div>
                   <div className="grid gap-px" style={{ gridTemplateColumns: `repeat(${items.length}, 1fr)`, background: theme.line }}>
                     {items.map((it) => (
@@ -238,8 +238,8 @@ export default function HomeScreen() {
                   </div>
                   <div className="px-4 xl:px-5 py-3 flex justify-between items-center" style={{ borderTop: `0.5px solid ${theme.line}` }}>
                     <div>
-                      <span className="font-sans font-bold text-[18px] xl:text-[22px]" style={{ color: theme.accent }}>¥{b.price}</span>
-                      <span className="font-sans text-xs line-through ml-1.5" style={{ color: theme.inkMuted }}>¥{b.orig}</span>
+                      <span className="font-sans font-bold text-[18px] xl:text-[22px]" style={{ color: theme.accent }}>${b.price}</span>
+                      <span className="font-sans text-xs line-through ml-1.5" style={{ color: theme.inkMuted }}>${b.orig}</span>
                     </div>
                     <CVIcon name="chev-r" size={16} stroke={theme.inkSoft} />
                   </div>
