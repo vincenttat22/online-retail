@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <filter id="bs" x="-15%" y="-10%" width="130%" height="125%">
+  <feDropShadow dx="0" dy="8" stdDeviation="10" flood-opacity="0.25"></feDropShadow>
+</filter>
+  </defs>
+  <rect width="1080" height="1080" fill="#f4ede0"></rect>
+  <g transform="translate(80, 120) scale(1.6) rotate(-12, 50, 50)"><path d="M 50 28 Q 30 28 22 50 Q 18 76 38 84 Q 50 88 50 82 Q 50 88 62 84 Q 82 76 78 50 Q 70 28 50 28 Z" fill="#c43823"></path><path d="M 50 28 Q 52 18 60 14" stroke="#3a4a2a" stroke-width="3" fill="none" stroke-linecap="round"></path><ellipse cx="42" cy="48" rx="6" ry="4" fill="#fff" opacity="0.3"></ellipse></g>
+  <g transform="translate(250, 70) scale(1.4) rotate(20, 50, 50)"><g><ellipse cx="50" cy="50" rx="32" ry="22" fill="#d4a64a" transform="rotate(-20 50 50)"></ellipse><circle cx="22" cy="42" r="3" fill="#d4a64a"></circle><circle cx="78" cy="58" r="3" fill="#d4a64a"></circle></g></g>
+  <g transform="translate(840, 90) scale(1.5) rotate(15, 50, 50)"><path d="M 50 30 L 38 80 Q 50 86 62 80 L 50 30 Z" fill="#b87355"></path><path d="M 50 30 Q 42 18 36 22" stroke="#5a7a3a" stroke-width="4" fill="none" stroke-linecap="round"></path><path d="M 50 30 Q 50 14 50 12" stroke="#5a7a3a" stroke-width="4" fill="none" stroke-linecap="round"></path><path d="M 50 30 Q 58 18 64 22" stroke="#5a7a3a" stroke-width="4" fill="none" stroke-linecap="round"></path><line x1="44" y1="42" x2="48" y2="42" stroke="#fff" stroke-width="1" opacity="0.4"></line><line x1="42" y1="58" x2="46" y2="58" stroke="#fff" stroke-width="1" opacity="0.4"></line></g>
+  <g transform="translate(920, 260) scale(1.4) rotate(-10, 50, 50)"><circle cx="50" cy="56" r="32" fill="#c43823"></circle><path d="M 30 30 L 38 38 M 50 24 L 50 36 M 70 30 L 62 38 M 42 30 L 46 38 M 58 30 L 54 38" stroke="#5a7a3a" stroke-width="3" fill="none" stroke-linecap="round"></path><circle cx="50" cy="32" r="4" fill="#5a7a3a"></circle><ellipse cx="40" cy="48" rx="6" ry="4" fill="#fff" opacity="0.3"></ellipse></g>
+  <g transform="translate(70, 830) scale(1.6) rotate(-8, 50, 35)"><path d="M 12 38 Q 10 22 28 22 Q 30 14 50 14 Q 70 14 72 22 Q 90 22 88 38 Q 92 56 70 58 L 30 58 Q 8 56 12 38 Z" fill="#c89968"></path><path d="M 26 30 Q 30 26 34 30 M 44 28 Q 48 24 52 28 M 62 30 Q 66 26 70 30" stroke="#8a6444" stroke-width="1.5" fill="none" stroke-linecap="round"></path></g>
+  <g transform="translate(870, 840) scale(1.5) rotate(12, 50, 50)"><circle cx="36" cy="68" r="18" fill="#7a3a4a"></circle><circle cx="64" cy="72" r="18" fill="#7a3a4a"></circle><path d="M 36 50 Q 36 30 50 22 Q 64 30 64 54" stroke="#3a4a2a" stroke-width="3" fill="none"></path><ellipse cx="30" cy="62" rx="4" ry="3" fill="#fff" opacity="0.3"></ellipse><ellipse cx="58" cy="66" rx="4" ry="3" fill="#fff" opacity="0.3"></ellipse></g>
+  <g transform="translate(300, 900) scale(1.4) rotate(20, 30, 39)"><ellipse cx="30" cy="46" rx="22" ry="30" fill="#f0e4d0"></ellipse><ellipse cx="22" cy="38" rx="5" ry="8" fill="#fff" opacity="0.5"></ellipse></g>
+  <g transform="translate(760, 870) scale(1.4) rotate(-10, 25, 50)"><rect x="20" y="6" width="10" height="14" fill="#1a1614"></rect><path d="M 18 20 L 18 30 Q 12 36 12 46 L 12 88 Q 12 94 18 94 L 32 94 Q 38 94 38 88 L 38 46 Q 38 36 32 30 L 32 20 Z" fill="#8a9a7e"></path><rect x="16" y="56" width="18" height="20" fill="#f4ede0" opacity="0.85"></rect><line x1="18" y1="64" x2="32" y2="64" stroke="#1a1614" stroke-width="0.8"></line><line x1="20" y1="69" x2="30" y2="69" stroke="#1a1614" stroke-width="0.5"></line></g>
+  <g transform="translate(130, 500) scale(1.3) rotate(8, 50, 50)"><path d="M 50 26 Q 42 30 42 42 Q 36 50 32 60 Q 28 80 50 86 Q 72 80 68 60 Q 64 50 58 42 Q 58 30 50 26 Z" fill="#d4a64a"></path><path d="M 50 26 Q 50 18 56 14" stroke="#3a4a2a" stroke-width="3" fill="none" stroke-linecap="round"></path><ellipse cx="58" cy="58" rx="4" ry="8" fill="#fff" opacity="0.25"></ellipse></g>
+  <g transform="translate(910, 530) scale(1.3) rotate(-5, 50, 50)"><path d="M 18 50 Q 18 24 50 24 Q 82 24 82 50 L 18 50 Z" fill="#d8c4a8"></path><rect x="40" y="48" width="20" height="34" rx="2" fill="#f0e4d0"></rect><circle cx="38" cy="38" r="4" fill="#f4ede0" opacity="0.6"></circle><circle cx="58" cy="34" r="3" fill="#f4ede0" opacity="0.6"></circle><circle cx="68" cy="42" r="3" fill="#f4ede0" opacity="0.6"></circle></g>
+  <g transform="translate(290, 248.33333333333331) scale(2.0833333333333335)">
+    <rect x="20" y="60" width="200" height="220" rx="3" ry="3" fill="#fff" filter="url(#bs)"></rect>
+    <g fill="none" stroke="#1a1614" stroke-width="5" stroke-linecap="square">
+      <path d="M 62 66 L 62 42 Q 62 28 80 28 Q 98 28 98 42 L 98 66"></path>
+      <path d="M 142 66 L 142 42 Q 142 28 160 28 Q 178 28 178 42 L 178 66"></path>
+    </g>
+    <text x="116" y="180" text-anchor="middle" font-family="Inter, sans-serif" font-weight="900" font-size="76" letter-spacing="-3" fill="#1a1614">CV</text>
+    <circle cx="174" cy="180" r="9" fill="#c43823"></circle>
+    <text x="120" y="222" text-anchor="middle" font-family="JetBrains Mono, monospace" font-weight="500" font-size="11" letter-spacing="4" fill="#1a1614" opacity="0.55">THE SHOP</text>
+  </g>
+</svg>
