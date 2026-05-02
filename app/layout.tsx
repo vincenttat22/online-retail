@@ -5,8 +5,8 @@ import { ThemeProvider } from '@/context/ThemeContext'
 import CVTopNav from '@/components/ui/CVTopNav'
 
 export const metadata: Metadata = {
-  title: 'CV Shop',
-  description: '精选日用百货 · 零食茶饮 · 美妆护肤',
+  title: 'CV Shop · 卡门小铺',
+  description: '只卖我们相信的好东西 · 从食物到生活，从日常到品质，用心为你甄选每一件商品',
   icons: {
     icon: '/favicon.ico',
   },

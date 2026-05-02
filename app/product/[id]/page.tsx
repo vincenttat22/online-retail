@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { headers } from 'next/headers'
 import ProductDetailScreen from '@/components/screens/ProductDetailScreen'
 import SettingsPanel from '@/components/ui/SettingsPanel'
 import { getProductById, getProducts } from '@/lib/db/queries'
+import { getBaseUrl } from '@/lib/metadata-utils'
 
 interface Props {
   params: Promise<{ id: string }>
@@ -18,11 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const primaryImage = product.images?.find((i) => i.isPrimary) ?? product.images?.[0]
-
-  const headersList = await headers()
-  const host = headersList.get('host') ?? 'localhost:3000'
-  const protocol = host.includes('localhost') ? 'http' : 'https'
-  const baseUrl = `${protocol}://${host}`
+  const baseUrl = await getBaseUrl()
 
   const ogImageUrl = primaryImage
     ? `${baseUrl}/api/products/${id}/images/${primaryImage.id}`
