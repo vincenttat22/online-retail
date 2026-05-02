@@ -5,8 +5,11 @@ import { ThemeProvider } from '@/context/ThemeContext'
 import CVTopNav from '@/components/ui/CVTopNav'
 
 export const metadata: Metadata = {
-  title: 'CV Shop · 严选小铺',
+  title: 'CV Shop',
   description: '精选日用百货 · 零食茶饮 · 美妆护肤',
+  icons: {
+    icon: '/favicon.ico',
+  },
 }
 
 export const viewport: Viewport = {
@@ -21,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="zh-CN">
       <head>
+        <link rel="icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link

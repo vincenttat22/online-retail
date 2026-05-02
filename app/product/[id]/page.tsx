@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await getProductById(Number(id))
 
   if (!product) {
-    return { title: 'CV Shop · 严选小铺' }
+    return { title: 'CV Shop' }
   }
 
   const primaryImage = product.images?.find((i) => i.isPrimary) ?? product.images?.[0]

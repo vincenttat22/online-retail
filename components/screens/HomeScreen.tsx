@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useTheme } from '@/context/ThemeContext'
@@ -28,10 +29,15 @@ export default function HomeScreen() {
 
       {/* ── MOBILE HEADER (hidden on md+, desktop uses CVTopNav in layout) ── */}
       <div className="md:hidden px-4 pt-14 pb-3 flex items-center justify-between">
-        <div>
-          <div className="font-mono text-[10px] tracking-[2px]" style={{ color: theme.inkMuted }}>CV·SHOP</div>
-          <div className="font-serif text-2xl font-black tracking-tight leading-none" style={{ color: theme.ink }}>严选小铺</div>
-        </div>
+        <Link href="/" className="flex items-center gap-2 drop-shadow-md">
+          <Image
+            src="/CV-logo-white.svg"
+            alt="CV Shop"
+            width={40}
+            height={40}
+            priority
+          />
+        </Link>
         <div className="flex gap-2">
           <Link href="/catalogue" className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: theme.surface, color: theme.ink }}>
             <CVIcon name="search" size={18} />
@@ -272,8 +278,15 @@ export default function HomeScreen() {
       {/* ── FOOTER (desktop/tablet only) ── */}
       <footer className="hidden md:grid grid-cols-2 xl:grid-cols-4 gap-6 text-[12px] px-6 xl:px-10 pt-7 mt-10 xl:mt-12 pb-8" style={{ color: theme.inkSoft, borderTop: `0.5px solid ${theme.line}` }}>
         <div>
-          <div className="font-serif text-base font-extrabold mb-2" style={{ color: theme.ink }}>严选小铺</div>
-          <div className="leading-relaxed">专注分享好物的小型反代<br />商铺，主营日用百货、零食<br />茶饮和美妆护肤。</div>
+          <Link href="/" className="inline-block mb-2 drop-shadow-lg">
+            <Image
+              src="/CV-logo-white.svg"
+              alt="CV Shop"
+              width={60}
+              height={60}
+            />
+          </Link>
+          <div className="leading-relaxed">精选日用百货、零食<br />茶饮和美妆护肤。</div>
         </div>
         <div>
           <div className="font-semibold mb-2" style={{ color: theme.ink }}>购物</div>

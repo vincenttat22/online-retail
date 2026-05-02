@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -52,16 +53,14 @@ export default function CVTopNav() {
       style={{ background: theme.bg, borderBottom: `0.5px solid ${theme.line}` }}
     >
       {/* Logo */}
-      <Link href="/" className="shrink-0 text-left">
-        <div className="font-mono text-[9px] tracking-[2px]" style={{ color: theme.inkMuted }}>
-          CV·SHOP
-        </div>
-        <div
-          className="font-serif text-[18px] xl:text-[22px] font-black tracking-tight leading-none"
-          style={{ color: theme.ink }}
-        >
-          严选小铺
-        </div>
+      <Link href="/" className="shrink-0 text-left drop-shadow-md">
+        <Image
+          src="/CV-logo-white.svg"
+          alt="CV Shop"
+          width={50}
+          height={60}
+          priority
+        />
       </Link>
 
       {/* Divider */}
