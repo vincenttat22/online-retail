@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useTheme } from '@/context/ThemeContext'
@@ -14,6 +14,7 @@ import CVIcon from '@/components/ui/CVIcon'
 import type { Product } from '@/lib/types'
 
 const COUNTDOWN_TARGET = Date.now() + 6 * 3600 * 1000 + 12 * 60 * 1000
+const SWIPE_THRESHOLD = 50
 
 interface ProductDetailScreenProps {
   product: Product
@@ -25,10 +26,11 @@ export default function ProductDetailScreen({ product: p, relatedProducts: relat
   const router = useRouter()
   const final = p.disc ? Math.round(p.price * (100 - p.disc)) / 100 : p.price
   const [imgIdx, setImgIdx] = useState(0)
+  const [touchStart, setTouchStart] = useState(0)
+  const thumbnailScrollRef = useRef<HTMLDivElement>(null)
   const catData = CATEGORIES.find((c) => c.id === p.cat)
   const images = p.images || []
   const currentImage = images[imgIdx]
-  const maxImages = Math.max(images.length, 4)
   const packDisplay = p.packSize && p.packUnit
     ? `${p.packSize}${p.packUnit}${p.unit ? ` / ${p.unit}` : ''}`
     : p.unit ?? null
@@ -37,6 +39,35 @@ export default function ProductDetailScreen({ product: p, relatedProducts: relat
     : p.unit
     ? `/ ${p.unit}`
     : null
+
+  const handleNextImage = () => {
+    if (images.length > 0) {
+      setImgIdx((prev) => (prev + 1) % images.length)
+    }
+  }
+
+  const handlePrevImage = () => {
+    if (images.length > 0) {
+      setImgIdx((prev) => (prev - 1 + images.length) % images.length)
+    }
+  }
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.touches[0].clientX)
+  }
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const touchEnd = e.changedTouches[0].clientX
+    const diff = touchStart - touchEnd
+
+    if (Math.abs(diff) > SWIPE_THRESHOLD) {
+      if (diff > 0) {
+        handleNextImage()
+      } else {
+        handlePrevImage()
+      }
+    }
+  }
 
   return (
     <div className="pb-32 md:pb-0 animate-cv-fade">
@@ -68,7 +99,11 @@ export default function ProductDetailScreen({ product: p, relatedProducts: relat
         {/* ── GALLERY ── */}
         <div>
           {/* Main image */}
-          <div className="relative md:rounded-[18px] md:overflow-hidden">
+          <div
+            className="relative md:rounded-[18px] md:overflow-hidden group"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
             {currentImage ? (
               <img
                 src={`/api/products/${p.id}/images/${currentImage.id}`}
@@ -76,7 +111,7 @@ export default function ProductDetailScreen({ product: p, relatedProducts: relat
                 className="w-full aspect-square object-cover bg-gray-200"
               />
             ) : (
-              <CVPlaceholder label={`${p.en} · ${imgIdx + 1}/${maxImages}`} tone={toneFor(p.id + imgIdx)} ratio={1} />
+              <CVPlaceholder label={`${p.en} · ${imgIdx + 1}/${images.length || 1}`} tone={toneFor(p.id + imgIdx)} ratio={1} />
             )}
 
             {/* Mobile nav overlay */}
@@ -86,32 +121,111 @@ export default function ProductDetailScreen({ product: p, relatedProducts: relat
               </Link>
             </div>
 
-            {/* Mobile image dots */}
-            {images.length > 0 && (
-              <div className="md:hidden absolute bottom-3 left-0 right-0 flex justify-center gap-1.5">
-                {images.map((_, i) => (
-                  <button key={i} onClick={() => setImgIdx(i)} className="h-1.5 rounded-full border-0 p-0 cursor-pointer transition-all duration-200"
-                    style={{ width: i === imgIdx ? 18 : 6, background: i === imgIdx ? theme.ink : 'rgba(255,255,255,0.85)' }}
-                  />
-                ))}
-              </div>
+            {/* Mobile: Arrow buttons - visible on mobile, hidden on desktop */}
+            {images.length > 1 && (
+              <>
+                <button
+                  onClick={handlePrevImage}
+                  className="md:hidden absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 active:scale-90"
+                  style={{ background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(8px)', color: theme.ink }}
+                  aria-label="Previous image"
+                >
+                  <CVIcon name="chev-l" size={20} />
+                </button>
+                <button
+                  onClick={handleNextImage}
+                  className="md:hidden absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 active:scale-90"
+                  style={{ background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(8px)', color: theme.ink }}
+                  aria-label="Next image"
+                >
+                  <CVIcon name="chev-r" size={20} />
+                </button>
+              </>
             )}
+
+            {/* Image counter and dots container */}
+            <div className="md:hidden absolute bottom-3 left-0 right-0 flex flex-col items-center gap-2">
+              {/* Image counter */}
+              {images.length > 0 && (
+                <span className="text-[11px] font-medium px-2 py-1 rounded-full" style={{ background: 'rgba(0,0,0,0.4)', color: '#ffffff' }}>
+                  {imgIdx + 1} / {images.length}
+                </span>
+              )}
+              {/* Dots */}
+              {images.length > 0 && (
+                <div className="flex justify-center gap-2">
+                  {images.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setImgIdx(i)}
+                      className="rounded-full border-0 p-0 cursor-pointer transition-all duration-200 hover:opacity-80"
+                      style={{
+                        width: i === imgIdx ? 24 : 8,
+                        height: 8,
+                        background: i === imgIdx ? '#ffffff' : 'rgba(255,255,255,0.6)',
+                      }}
+                      aria-label={`View image ${i + 1}`}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Desktop thumbnail strip */}
+          {/* Desktop thumbnail strip with navigation */}
           {images.length > 0 && (
-            <div className="hidden md:grid gap-2 mt-3" style={{ gridTemplateColumns: `repeat(${Math.min(images.length, 4)}, 1fr)` }}>
-              {images.slice(0, 4).map((img, i) => (
-                <button key={i} onClick={() => setImgIdx(i)} className="p-0 rounded-[10px] overflow-hidden cursor-pointer bg-transparent"
-                  style={{ border: i === imgIdx ? `2px solid ${theme.ink}` : `1px solid ${theme.line}` }}
+            <div className="hidden md:flex gap-2 mt-3">
+              {images.length > 4 && (
+                <button
+                  onClick={() => {
+                    if (thumbnailScrollRef.current) {
+                      thumbnailScrollRef.current.scrollBy({ left: -100, behavior: 'smooth' })
+                    }
+                  }}
+                  className="shrink-0 w-10 h-10 rounded-[10px] flex items-center justify-center transition-all hover:bg-gray-100"
+                  style={{ border: `1px solid ${theme.line}`, color: theme.ink }}
+                  aria-label="Previous images"
                 >
-                  <img
-                    src={`/api/products/${p.id}/images/${img.id}`}
-                    alt={img.altText || `${p.zh} - ${i + 1}`}
-                    className="w-full aspect-square object-cover bg-gray-200"
-                  />
+                  <CVIcon name="chev-l" size={18} />
                 </button>
-              ))}
+              )}
+
+              <div
+                ref={thumbnailScrollRef}
+                className="flex gap-2 overflow-x-auto flex-1 scroll-smooth"
+                style={{ scrollBehavior: 'smooth' }}
+              >
+                {images.map((img, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setImgIdx(i)}
+                    className="shrink-0 w-20 h-20 p-0 rounded-[10px] overflow-hidden cursor-pointer bg-transparent transition-all"
+                    style={{ border: i === imgIdx ? `2px solid ${theme.ink}` : `1px solid ${theme.line}` }}
+                    aria-label={`View image ${i + 1}`}
+                  >
+                    <img
+                      src={`/api/products/${p.id}/images/${img.id}`}
+                      alt={img.altText || `${p.zh} - ${i + 1}`}
+                      className="w-full h-full aspect-square object-cover bg-gray-200"
+                    />
+                  </button>
+                ))}
+              </div>
+
+              {images.length > 4 && (
+                <button
+                  onClick={() => {
+                    if (thumbnailScrollRef.current) {
+                      thumbnailScrollRef.current.scrollBy({ left: 100, behavior: 'smooth' })
+                    }
+                  }}
+                  className="shrink-0 w-10 h-10 rounded-[10px] flex items-center justify-center transition-all hover:bg-gray-100"
+                  style={{ border: `1px solid ${theme.line}`, color: theme.ink }}
+                  aria-label="Next images"
+                >
+                  <CVIcon name="chev-r" size={18} />
+                </button>
+              )}
             </div>
           )}
         </div>
