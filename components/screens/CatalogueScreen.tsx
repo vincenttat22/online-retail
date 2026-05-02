@@ -9,6 +9,8 @@ import CVChip from '@/components/ui/CVChip'
 import CVProductCard from '@/components/ui/CVProductCard'
 import CVIcon from '@/components/ui/CVIcon'
 import type { Product } from '@/lib/types'
+import { metadata } from '../ui/metaData'
+import { Metadata } from 'next'
 
 type SortKey = 'price' | 'priceDesc'
 
@@ -16,6 +18,10 @@ interface CatalogueScreenProps {
   products: Product[]
   initialCat?: string
   initialQ?: string
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return metadata
 }
 
 export default function CatalogueScreen({ products, initialCat = 'all', initialQ = '' }: CatalogueScreenProps) {

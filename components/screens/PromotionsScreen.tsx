@@ -14,6 +14,10 @@ import CVIcon from '@/components/ui/CVIcon'
 
 const FLASH_TARGET = Date.now() + 1 * 3600 * 1000 + 47 * 60 * 1000
 
+export async function generateMetadata(): Promise<Metadata> {
+  return metadata
+}
+
 export default function PromotionsScreen() {
   const { theme, fx } = useTheme()
   const router = useRouter()
