@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { useTheme } from '@/context/ThemeContext'
 import type { ColorTheme } from '@/lib/types'
 import { CV_THEMES } from '@/lib/tokens'
@@ -15,14 +16,16 @@ const THEME_OPTIONS: { value: ColorTheme; label: string }[] = [
 export default function SettingsPanel() {
   const [open, setOpen] = useState(false)
   const { colorTheme, setColorTheme, promoIntensity, setPromoIntensity } = useTheme()
+  const searchParams = useSearchParams()
+  const isAdmin = searchParams.get('tweaks') === '1'
 
   return (
     <>
-      {/* Floating trigger — sits above tab bar on mobile, bottom-right on desktop */}
+      {/* Floating trigger — only visible to admins via ?tweaks=1 */}
       <button
         onClick={() => setOpen(true)}
         className="fixed bottom-24 md:bottom-8 right-4 md:right-8 z-40 w-11 h-11 rounded-full flex items-center justify-center shadow-lg transition-transform active:scale-95"
-        style={{ background: 'var(--cv-surface)', color: 'var(--cv-ink)', border: '1px solid var(--cv-line)' }}
+        style={{ display: isAdmin ? undefined : 'none', background: 'var(--cv-surface)', color: 'var(--cv-ink)', border: '1px solid var(--cv-line)' }}
         aria-label="Settings"
       >
         <CVIcon name="settings" size={18} />
