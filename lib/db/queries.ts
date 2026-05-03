@@ -1,6 +1,7 @@
+import { cache } from 'react'
 import { db } from './index'
 import { products, productImages } from './schema'
-import { eq, and } from 'drizzle-orm'
+import { eq, and, inArray } from 'drizzle-orm'
 import type { Product } from '@/lib/types'
 
 function toProduct(row: typeof products.$inferSelect, images: any[] = []): Product {
@@ -19,9 +20,47 @@ function toProduct(row: typeof products.$inferSelect, images: any[] = []): Produ
   }
 }
 
+function toImage(row: typeof productImages.$inferSelect) {
+  return {
+    id: row.id,
+    r2Url: row.r2Url,
+    altText: row.altText ?? undefined,
+    isPrimary: row.isPrimary ?? false,
+  }
+}
+
 export async function getProducts(limit?: number): Promise<Product[]> {
   try {
-    let query = db
+    if (limit) {
+      // Two-step: limit unique products first, then fetch their images separately.
+      // A single JOIN + LIMIT would limit rows not products, returning fewer than expected.
+      const productRows = await db
+        .select()
+        .from(products)
+        .where(and(
+          eq(products.active, true),
+          eq(products.isPublished, true),
+        ))
+        .limit(limit)
+
+      if (!productRows.length) return []
+
+      const ids = productRows.map((r) => r.id)
+      const imageRows = await db
+        .select()
+        .from(productImages)
+        .where(inArray(productImages.productId, ids))
+
+      const imagesByProduct = new Map<number, ReturnType<typeof toImage>[]>()
+      for (const img of imageRows) {
+        if (!imagesByProduct.has(img.productId)) imagesByProduct.set(img.productId, [])
+        imagesByProduct.get(img.productId)!.push(toImage(img))
+      }
+
+      return productRows.map((row) => toProduct(row, imagesByProduct.get(row.id) ?? []))
+    }
+
+    const rows = await db
       .select()
       .from(products)
       .leftJoin(productImages, eq(products.id, productImages.productId))
@@ -30,39 +69,25 @@ export async function getProducts(limit?: number): Promise<Product[]> {
         eq(products.isPublished, true),
       ))
 
-    const rows = await (limit ? query.limit(limit) : query)
-
-    const productMap = new Map<number, any>();
-
+    const productMap = new Map<number, any>()
     for (const row of rows) {
-      const productRow = row.products;
+      const productRow = row.products
       if (!productMap.has(productRow.id)) {
-        productMap.set(productRow.id, {
-          row: productRow,
-          images: []
-        });
+        productMap.set(productRow.id, { row: productRow, images: [] })
       }
-
       if (row.product_images) {
-        productMap.get(productRow.id)!.images.push({
-          id: row.product_images.id,
-          r2Url: row.product_images.r2Url,
-          altText: row.product_images.altText ?? undefined,
-          isPrimary: row.product_images.isPrimary ?? false,
-        });
+        productMap.get(productRow.id)!.images.push(toImage(row.product_images))
       }
     }
 
-    return Array.from(productMap.values()).map(({ row, images }) =>
-      toProduct(row, images)
-    );
+    return Array.from(productMap.values()).map(({ row, images }) => toProduct(row, images))
   } catch (error) {
     console.error('Failed to fetch products:', error)
     return []
   }
 }
 
-export async function getProductById(id: number): Promise<Product | null> {
+export const getProductById = cache(async (id: number): Promise<Product | null> => {
   try {
     const rows = await db
       .select()
@@ -78,23 +103,11 @@ export async function getProductById(id: number): Promise<Product | null> {
     const productRow = rows[0].products
     const images = rows
       .filter(row => row.product_images !== null)
-      .map(row => ({
-        id: row.product_images!.id,
-        r2Url: row.product_images!.r2Url,
-        altText: row.product_images!.altText ?? undefined,
-        isPrimary: row.product_images!.isPrimary ?? false,
-      }))
+      .map(row => toImage(row.product_images!))
 
     return toProduct(productRow, images)
   } catch (error) {
     console.error(`Failed to fetch product ${id}:`, error)
     return null
   }
-}
-
-export async function getProductImages(productId: number) {
-  return db
-    .select()
-    .from(productImages)
-    .where(eq(productImages.productId, productId))
-}
+})
