@@ -45,7 +45,7 @@ export default async function ProductPage({ params }: Props) {
   const { id } = await params
   const [product, allProducts] = await Promise.all([
     getProductById(Number(id)),
-    getProducts(),
+    getProducts(5),
   ])
 
   if (!product) notFound()

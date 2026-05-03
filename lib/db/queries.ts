@@ -19,9 +19,9 @@ function toProduct(row: typeof products.$inferSelect, images: any[] = []): Produ
   }
 }
 
-export async function getProducts(): Promise<Product[]> {
+export async function getProducts(limit?: number): Promise<Product[]> {
   try {
-    const rows = await db
+    let query = db
       .select()
       .from(products)
       .leftJoin(productImages, eq(products.id, productImages.productId))
@@ -29,6 +29,8 @@ export async function getProducts(): Promise<Product[]> {
         eq(products.active, true),
         eq(products.isPublished, true),
       ))
+
+    const rows = await (limit ? query.limit(limit) : query)
 
     const productMap = new Map<number, any>();
 
