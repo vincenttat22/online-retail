@@ -37,7 +37,7 @@ export async function getProducts(limit?: number): Promise<Product[]> {
       const productRows = await db
         .select()
         .from(products)
-        .leftJoin(productCategories, eq(products.categoryId, productCategories.id))
+        .leftJoin(productCategories, eq(products.category, productCategories.name))
         .where(and(
           eq(products.active, true),
           eq(products.isPublished, true),
@@ -63,7 +63,7 @@ export async function getProducts(limit?: number): Promise<Product[]> {
       const rows = await db
         .select()
         .from(products)
-        .leftJoin(productCategories, eq(products.categoryId, productCategories.id))
+        .leftJoin(productCategories, eq(products.category, productCategories.name))
         .leftJoin(productImages, eq(products.id, productImages.productId))
         .where(and(
           eq(products.active, true),
@@ -94,7 +94,7 @@ export const getProductById = cache(async (id: number): Promise<Product | null> 
     const rows = await db
       .select()
       .from(products)
-      .leftJoin(productCategories, eq(products.categoryId, productCategories.id))
+      .leftJoin(productCategories, eq(products.category, productCategories.name))
       .leftJoin(productImages, eq(products.id, productImages.productId))
       .where(and(
         eq(products.id, id),
