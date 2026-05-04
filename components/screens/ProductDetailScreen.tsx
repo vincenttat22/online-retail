@@ -11,7 +11,8 @@ import CVProductCard from '@/components/ui/CVProductCard'
 import CVCountdown from '@/components/ui/CVCountdown'
 import CVWeChatCTA from '@/components/ui/CVWeChatCTA'
 import CVIcon from '@/components/ui/CVIcon'
-import type { Product } from '@/lib/types'
+import RecipeFloatingButton from '@/components/ui/RecipeFloatingButton'
+import type { Product, Recipe } from '@/lib/types'
 
 const COUNTDOWN_TARGET = Date.now() + 6 * 3600 * 1000 + 12 * 60 * 1000
 const SWIPE_THRESHOLD = 50
@@ -19,9 +20,10 @@ const SWIPE_THRESHOLD = 50
 interface ProductDetailScreenProps {
   product: Product
   relatedProducts: Product[]
+  recipes?: Recipe[]
 }
 
-export default function ProductDetailScreen({ product: p, relatedProducts: related }: ProductDetailScreenProps) {
+export default function ProductDetailScreen({ product: p, relatedProducts: related, recipes = [] }: ProductDetailScreenProps) {
   const { theme, fx } = useTheme()
   const router = useRouter()
   const final = p.disc ? Math.round(p.price * (100 - p.disc)) / 100 : p.price
@@ -302,6 +304,10 @@ export default function ProductDetailScreen({ product: p, relatedProducts: relat
       <div className="md:hidden fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[430px] px-4 pt-3 pb-8 flex gap-2 z-30" style={{ background: theme.bg, borderTop: `0.5px solid ${theme.line}` }}>
         <CVWeChatCTA full label="微信下单" />
       </div>
+
+      {recipes.length > 0 && (
+        <RecipeFloatingButton productId={p.id} count={recipes.length} />
+      )}
     </div>
   )
 }

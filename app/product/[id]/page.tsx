@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import ProductDetailScreen from '@/components/screens/ProductDetailScreen'
 import SettingsPanel from '@/components/ui/SettingsPanel'
-import { getProductById, getProducts } from '@/lib/db/queries'
+import { getProductById, getProducts, getRecipesByProductId } from '@/lib/db/queries'
 import { getBaseUrl } from '@/lib/metadata-utils'
 
 interface Props {
@@ -43,9 +43,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProductPage({ params }: Props) {
   const { id } = await params
-  const [product, allProducts] = await Promise.all([
+  const [product, allProducts, recipes] = await Promise.all([
     getProductById(Number(id)),
     getProducts(5),
+    getRecipesByProductId(Number(id)),
   ])
 
   if (!product) notFound()
@@ -54,7 +55,7 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <>
-      <ProductDetailScreen product={product} relatedProducts={related} />
+      <ProductDetailScreen product={product} relatedProducts={related} recipes={recipes} />
       <SettingsPanel />
     </>
   )

@@ -1,8 +1,14 @@
 import { cache } from 'react'
 import { db } from './index'
-import { products, productImages, productCategories } from './schema'
-import { eq, and, inArray } from 'drizzle-orm'
-import type { Product } from '@/lib/types'
+import {
+  products,
+  productImages,
+  productCategories,
+  recipes,
+  recipeIngredients,
+} from './schema'
+import { eq, and, inArray, desc, asc } from 'drizzle-orm'
+import type { Product, Recipe, RecipeIngredient } from '@/lib/types'
 
 function toProduct(row: typeof products.$inferSelect, categoryValue: string | null, images: any[] = []): Product {
   return {
@@ -112,6 +118,84 @@ export const getProductById = cache(async (id: number): Promise<Product | null> 
     return toProduct(productRow, categoryValue, images)
   } catch (error) {
     console.error(`Failed to fetch product ${id}:`, error)
+    return null
+  }
+})
+
+function toIngredient(row: typeof recipeIngredients.$inferSelect): RecipeIngredient {
+  const followsMatch = row.matchConfidence === 'exact' || row.matchConfidence === 'fuzzy'
+  return {
+    id: row.id,
+    name: row.name,
+    quantity: row.quantity ?? undefined,
+    unit: row.unit ?? undefined,
+    matchedProductId: followsMatch && row.matchedProductId != null ? row.matchedProductId : undefined,
+    notes: row.notes ?? undefined,
+    displayOrder: row.displayOrder,
+  }
+}
+
+function toRecipe(row: typeof recipes.$inferSelect): Recipe {
+  return {
+    id: row.id,
+    productId: row.productId,
+    titleZh: row.titleZh,
+    titleEn: row.titleEn,
+    cuisineType: row.cuisineType,
+    difficulty: row.difficulty,
+    timeMinutes: row.timeMinutes,
+    servings: row.servings,
+    description: row.description ?? undefined,
+    instructions: row.instructions,
+    hasHeroImage: row.heroImageUrl != null,
+    ingredients: [],
+  }
+}
+
+export const getRecipesByProductId = cache(async (productId: number): Promise<Recipe[]> => {
+  try {
+    const rows = await db
+      .select()
+      .from(recipes)
+      .leftJoin(recipeIngredients, eq(recipeIngredients.recipeId, recipes.id))
+      .where(and(eq(recipes.productId, productId), eq(recipes.status, 'published')))
+      .orderBy(desc(recipes.generatedAt), asc(recipeIngredients.displayOrder))
+
+    const byId = new Map<number, Recipe>()
+    for (const row of rows) {
+      const r = row.recipes
+      if (!byId.has(r.id)) byId.set(r.id, toRecipe(r))
+      if (row.recipe_ingredients) {
+        byId.get(r.id)!.ingredients.push(toIngredient(row.recipe_ingredients))
+      }
+    }
+    return Array.from(byId.values())
+  } catch (error) {
+    console.error(`Failed to fetch recipes for product ${productId}:`, error)
+    return []
+  }
+})
+
+export const getRecipeById = cache(async (id: number): Promise<Recipe | null> => {
+  try {
+    const rows = await db
+      .select()
+      .from(recipes)
+      .leftJoin(recipeIngredients, eq(recipeIngredients.recipeId, recipes.id))
+      .where(and(eq(recipes.id, id), eq(recipes.status, 'published')))
+      .orderBy(asc(recipeIngredients.displayOrder))
+
+    if (!rows.length) return null
+
+    const recipe = toRecipe(rows[0].recipes)
+    for (const row of rows) {
+      if (row.recipe_ingredients) {
+        recipe.ingredients.push(toIngredient(row.recipe_ingredients))
+      }
+    }
+    return recipe
+  } catch (error) {
+    console.error(`Failed to fetch recipe ${id}:`, error)
     return null
   }
 })

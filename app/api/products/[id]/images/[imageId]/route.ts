@@ -2,32 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { productImages } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
-import { getFromR2Binding } from '@/lib/services/r2'
-
-function getEnvFromRequest(request: NextRequest): any {
-  const globalAny = globalThis as any
-
-  try {
-    const cloudflareContext = globalAny[Symbol.for('__cloudflare-context__')]
-    if (cloudflareContext?.env) {
-      console.log('[getEnvFromRequest] Found bindings via AsyncLocalStorage')
-      return cloudflareContext.env
-    }
-  } catch (e) {
-    console.warn('[getEnvFromRequest] Failed to access AsyncLocalStorage:', e)
-  }
-
-  // Fallback to request context
-  const asAny = request as any
-  if (asAny.context?.env) {
-    console.log('[getEnvFromRequest] Found bindings via request.context.env')
-    return asAny.context.env
-  }
-
-  // Local development
-  console.log('[getEnvFromRequest] Using process.env (local development)')
-  return process.env
-}
+import { getFromR2Binding, getEnvFromRequest } from '@/lib/services/r2'
 
 export async function GET(
   request: NextRequest,

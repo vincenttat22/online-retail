@@ -1,6 +1,27 @@
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3'
+import type { NextRequest } from 'next/server'
 
 let _client: S3Client | null = null
+
+export function getEnvFromRequest(request: NextRequest): any {
+  const globalAny = globalThis as any
+
+  try {
+    const cloudflareContext = globalAny[Symbol.for('__cloudflare-context__')]
+    if (cloudflareContext?.env) {
+      return cloudflareContext.env
+    }
+  } catch (e) {
+    console.warn('[getEnvFromRequest] Failed to access AsyncLocalStorage:', e)
+  }
+
+  const asAny = request as any
+  if (asAny.context?.env) {
+    return asAny.context.env
+  }
+
+  return process.env
+}
 
 function getClient(): S3Client {
   if (!_client) {

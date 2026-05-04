@@ -66,3 +66,31 @@ export interface PromoFx {
   bigTimer: boolean
   intensity: number
 }
+
+export type CuisineType = 'chinese' | 'western' | 'fusion'
+export type RecipeDifficulty = 'easy' | 'medium' | 'hard'
+
+export interface RecipeIngredient {
+  id: number
+  name: string
+  quantity?: string
+  unit?: string
+  matchedProductId?: number
+  notes?: string
+  displayOrder: number
+}
+
+export interface Recipe {
+  id: number
+  productId: number
+  titleZh: string
+  titleEn: string
+  cuisineType: CuisineType
+  difficulty: RecipeDifficulty
+  timeMinutes: number
+  servings: number
+  description?: string
+  instructions: string
+  hasHeroImage: boolean
+  ingredients: RecipeIngredient[]
+}

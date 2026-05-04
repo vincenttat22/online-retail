@@ -8,6 +8,7 @@ import {
   text,
   boolean,
   timestamp,
+  jsonb,
   uniqueIndex,
   index,
 } from 'drizzle-orm/pg-core'
@@ -80,3 +81,68 @@ export const productImages = pgTable(
 export type DbProduct = typeof products.$inferSelect
 export type DbProductImage = typeof productImages.$inferSelect
 export type DbProductCategory = typeof productCategories.$inferSelect
+
+export const cuisineTypeEnum = pgEnum('cuisine_type', ['chinese', 'western', 'fusion'])
+export const recipeDifficultyEnum = pgEnum('recipe_difficulty', ['easy', 'medium', 'hard'])
+export const recipeStatusEnum = pgEnum('recipe_status', ['draft', 'published'])
+export const ingredientMatchConfidenceEnum = pgEnum('ingredient_match_confidence', [
+  'none',
+  'exact',
+  'fuzzy',
+])
+
+export const recipes = pgTable(
+  'recipes',
+  {
+    id: serial('id').primaryKey(),
+    productId: integer('product_id')
+      .references(() => products.id, { onDelete: 'cascade' })
+      .notNull(),
+    titleZh: varchar('title_zh', { length: 255 }).notNull(),
+    titleEn: varchar('title_en', { length: 255 }).notNull(),
+    cuisineType: cuisineTypeEnum('cuisine_type').notNull(),
+    difficulty: recipeDifficultyEnum('difficulty').notNull(),
+    timeMinutes: integer('time_minutes').notNull(),
+    servings: integer('servings').notNull(),
+    description: text('description'),
+    instructions: text('instructions').notNull(),
+    heroImageUrl: text('hero_image_url'),
+    sourceUrls: jsonb('source_urls'),
+    understanding: jsonb('understanding'),
+    generatedByModel: varchar('generated_by_model', { length: 64 }),
+    status: recipeStatusEnum('status').default('draft').notNull(),
+    generatedAt: timestamp('generated_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (t) => [
+    index('recipes_product_id_idx').on(t.productId),
+    index('recipes_cuisine_type_idx').on(t.cuisineType),
+    index('recipes_status_idx').on(t.status),
+  ],
+)
+
+export const recipeIngredients = pgTable(
+  'recipe_ingredients',
+  {
+    id: serial('id').primaryKey(),
+    recipeId: integer('recipe_id')
+      .references(() => recipes.id, { onDelete: 'cascade' })
+      .notNull(),
+    name: varchar('name', { length: 255 }).notNull(),
+    quantity: varchar('quantity', { length: 64 }),
+    unit: varchar('unit', { length: 32 }),
+    matchedProductId: integer('matched_product_id').references(() => products.id, {
+      onDelete: 'set null',
+    }),
+    matchConfidence: ingredientMatchConfidenceEnum('match_confidence').default('none').notNull(),
+    notes: text('notes'),
+    displayOrder: integer('display_order').default(0).notNull(),
+  },
+  (t) => [
+    index('recipe_ingredients_recipe_id_idx').on(t.recipeId),
+    index('recipe_ingredients_matched_product_id_idx').on(t.matchedProductId),
+  ],
+)
+
+export type DbRecipe = typeof recipes.$inferSelect
+export type DbRecipeIngredient = typeof recipeIngredients.$inferSelect
