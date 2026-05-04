@@ -4,22 +4,24 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useTheme } from '@/context/ThemeContext'
-import { CATEGORIES, toneFor } from '@/lib/tokens'
+import { toneFor } from '@/lib/tokens'
 import CVChip from '@/components/ui/CVChip'
 import CVProductCard from '@/components/ui/CVProductCard'
 import CVIcon from '@/components/ui/CVIcon'
 import type { Product } from '@/lib/types'
+import type { DbProductCategory } from '@/lib/db/schema'
 
 
 type SortKey = 'price' | 'priceDesc'
 
 interface CatalogueScreenProps {
   products: Product[]
+  categories: DbProductCategory[]
   initialCat?: string
   initialQ?: string
 }
 
-export default function CatalogueScreen({ products, initialCat = 'all', initialQ = '' }: CatalogueScreenProps) {
+export default function CatalogueScreen({ products, categories, initialCat = 'all', initialQ = '' }: CatalogueScreenProps) {
   const { theme, fx } = useTheme()
   const router = useRouter()
   const productMaxPrice = Math.max(20, ...products.map((p) => Math.ceil(p.price)))
@@ -47,7 +49,7 @@ export default function CatalogueScreen({ products, initialCat = 'all', initialQ
     return 0
   })
 
-  const activeCat = CATEGORIES.find((c) => c.id === cat)
+  const activeCat = cat === 'all' ? null : categories.find((c) => c.name === cat)
 
   return (
     <div className="animate-cv-fade">
@@ -61,14 +63,22 @@ export default function CatalogueScreen({ products, initialCat = 'all', initialQ
         <aside className="hidden md:block self-start sticky top-[72px]">
           <div className="font-mono text-[10px] tracking-[2px] mb-3" style={{ color: theme.inkMuted }}>CATEGORIES</div>
           <div className="flex flex-col mb-6">
-            {CATEGORIES.map((c) => {
-              const active = cat === c.id
+            <button onClick={() => setCat('all')}
+              className="bg-transparent border-0 py-2 cursor-pointer text-left flex justify-between items-center text-[13px]"
+              style={{ color: cat === 'all' ? theme.ink : theme.inkSoft, fontWeight: cat === 'all' ? 600 : 400, borderBottom: `0.5px solid ${theme.line}` }}
+            >
+              <span>全部All</span>
+              {cat === 'all' && <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: theme.accent }} />}
+            </button>
+            {categories.map((c) => {
+              const active = cat === c.name
+              const label = c.nameEn ? `${c.name}${c.nameEn}` : c.name
               return (
-                <button key={c.id} onClick={() => setCat(c.id)}
+                <button key={c.id} onClick={() => setCat(c.name)}
                   className="bg-transparent border-0 py-2 cursor-pointer text-left flex justify-between items-center text-[13px]"
                   style={{ color: active ? theme.ink : theme.inkSoft, fontWeight: active ? 600 : 400, borderBottom: `0.5px solid ${theme.line}` }}
                 >
-                  <span>{c.zh}<span className="ml-1.5 text-[10px] font-sans font-normal" style={{ color: theme.inkMuted }}>{c.en}</span></span>
+                  <span>{label}</span>
                   {active && <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: theme.accent }} />}
                 </button>
               )
@@ -111,9 +121,11 @@ export default function CatalogueScreen({ products, initialCat = 'all', initialQ
             </div>
             {/* Mobile category chips */}
             <div className="flex gap-1.5 overflow-x-auto -mx-4 px-4 pb-1.5 cv-scroll-x">
-              {CATEGORIES.map((c) => (
-                <CVChip key={c.id} active={cat === c.id} onClick={() => setCat(c.id)}>{c.zh}</CVChip>
-              ))}
+              <CVChip active={cat === 'all'} onClick={() => setCat('all')}>全部</CVChip>
+              {categories.map((c) => {
+                const label = c.nameEn ? `${c.name}${c.nameEn}` : c.name
+                return <CVChip key={c.id} active={cat === c.name} onClick={() => setCat(c.name)}>{label}</CVChip>
+              })}
             </div>
             {/* Mobile secondary filters */}
             <div className="flex gap-1.5 mt-2 overflow-x-auto cv-scroll-x pb-1">
@@ -126,7 +138,7 @@ export default function CatalogueScreen({ products, initialCat = 'all', initialQ
           {/* Desktop header row */}
           <header className="hidden md:flex items-center justify-between mb-5 gap-3 flex-wrap">
             <h1 className="m-0 font-serif font-extrabold tracking-tight text-[24px] xl:text-[32px]" style={{ color: theme.ink }}>
-              {activeCat?.zh ?? '全部'}
+              {activeCat ? (activeCat.nameEn ? `${activeCat.name}${activeCat.nameEn}` : activeCat.name) : '全部All'}
               <span className="font-mono text-[12px] font-normal tracking-[1.5px] ml-3" style={{ color: theme.inkMuted }}>
                 {String(filtered.length).padStart(2, '0')} ITEMS
               </span>
@@ -140,7 +152,7 @@ export default function CatalogueScreen({ products, initialCat = 'all', initialQ
 
           {/* Mobile result count */}
           <div className="md:hidden px-4 pt-3 pb-1.5 font-mono text-[10px] tracking-[1.5px]" style={{ color: theme.inkMuted }}>
-            {String(filtered.length).padStart(2, '0')} ITEMS · {activeCat?.en.toUpperCase() ?? 'ALL'}
+            {String(filtered.length).padStart(2, '0')} ITEMS · {activeCat ? (activeCat.nameEn ?? activeCat.name).toUpperCase() : 'ALL'}
           </div>
 
           {/* Product grid — shared, responsive columns */}

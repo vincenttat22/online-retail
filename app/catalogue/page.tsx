@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import CataloguePageClient from './CataloguePageClient'
 import SettingsPanel from '@/components/ui/SettingsPanel'
-import { getProducts } from '@/lib/db/queries'
+import { getProducts, getCategories } from '@/lib/db/queries'
 import { getDefaultMetadata } from '@/lib/metadata-utils'
 
 export const dynamic = 'force-dynamic'
@@ -12,12 +12,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function CataloguePage() {
-  const products = await getProducts()
+  const [products, categories] = await Promise.all([
+    getProducts(),
+    getCategories(),
+  ])
 
   return (
     <>
       <Suspense>
-        <CataloguePageClient products={products} />
+        <CataloguePageClient products={products} categories={categories} />
       </Suspense>
       <SettingsPanel />
     </>

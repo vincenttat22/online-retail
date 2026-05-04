@@ -13,7 +13,21 @@ import {
 } from 'drizzle-orm/pg-core'
 
 export const fulfillmentTypeEnum = pgEnum('fulfillment_type', ['ON_DEMAND', 'STOCK', 'DROPSHIP'])
-export const categoryEnum = pgEnum('category', ['MEAT_SEAFOOD', 'SNACKS', 'HOUSEHOLD', 'BEAUTY_HEALTH', 'OTHER'])
+
+export const productCategories = pgTable(
+  'product_categories',
+  {
+    id: serial('id').primaryKey(),
+    name: varchar('name', { length: 100 }).notNull().unique(),
+    nameEn: varchar('name_en', { length: 100 }),
+    description: text('description'),
+    descriptionEn: text('description_en'),
+    displayOrder: integer('display_order').default(0).notNull(),
+    createdAt: timestamp('created_at').defaultNow(),
+    updatedAt: timestamp('updated_at').defaultNow(),
+  },
+  (t) => [index('product_categories_name_idx').on(t.name)],
+)
 
 export const products = pgTable(
   'products',
@@ -24,7 +38,7 @@ export const products = pgTable(
     barcode: varchar('barcode', { length: 100 }),
     unitPrice: numeric('unit_price', { precision: 10, scale: 2 }).notNull(),
     costPrice: numeric('cost_price', { precision: 10, scale: 2 }),
-    category: categoryEnum('category').default('OTHER'),
+    categoryId: integer('category_id').references(() => productCategories.id),
     fulfillmentType: fulfillmentTypeEnum('fulfillment_type').default('ON_DEMAND'),
     description: text('description'),
     imageUrl: text('image_url'),
@@ -39,7 +53,7 @@ export const products = pgTable(
   },
   (t) => [
     uniqueIndex('products_sku_idx').on(t.sku),
-    index('products_category_idx').on(t.category),
+    index('products_category_id_idx').on(t.categoryId),
     index('products_fulfillment_type_idx').on(t.fulfillmentType),
     index('products_active_idx').on(t.active),
     index('products_draft_idx').on(t.draft),
@@ -65,3 +79,4 @@ export const productImages = pgTable(
 
 export type DbProduct = typeof products.$inferSelect
 export type DbProductImage = typeof productImages.$inferSelect
+export type DbProductCategory = typeof productCategories.$inferSelect
