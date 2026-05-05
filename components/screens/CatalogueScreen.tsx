@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useTheme } from '@/context/ThemeContext'
@@ -29,6 +30,7 @@ export default function CatalogueScreen({ products, categories, initialCat = 'al
   const [cat, setCat] = useState(initialCat)
   const [priceMax, setPriceMax] = useState(productMaxPrice)
   const [sort, setSort] = useState<SortKey>('price')
+  const [showFilters, setShowFilters] = useState(true)
 
   useEffect(() => {
     setQ(initialQ)
@@ -100,10 +102,10 @@ export default function CatalogueScreen({ products, categories, initialCat = 'al
         {/* ── MAIN COLUMN ── */}
         <div>
           {/* Mobile sticky search header */}
-          <div className="md:hidden px-4 pt-14 pb-2 sticky top-0 z-10" style={{ background: theme.bg }}>
+          <div className="md:hidden px-4 pt-3 pb-2 sticky top-0 z-10" style={{ background: theme.bg }}>
             <div className="flex items-center gap-2 mb-3">
-              <Link href="/" className="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style={{ background: theme.surface, color: theme.ink }}>
-                <CVIcon name="chev-l" size={16} />
+              <Link href="/" className="shrink-0 drop-shadow-md">
+                <Image src="/CV-logo-white.svg" alt="CV Shop" width={36} height={36} priority />
               </Link>
               <div className="flex-1 h-9 rounded-full flex items-center px-3 gap-2" style={{ background: theme.surface }}>
                 <CVIcon name="search" size={15} stroke={theme.inkMuted} />
@@ -117,25 +119,33 @@ export default function CatalogueScreen({ products, categories, initialCat = 'al
                   </button>
                 )}
               </div>
-              <button className="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style={{ background: theme.surface, color: theme.ink }}>
+              <button
+                onClick={() => setShowFilters((v) => !v)}
+                className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+                style={{ background: showFilters ? theme.accent : theme.surface, color: showFilters ? theme.bg : theme.ink }}
+              >
                 <CVIcon name="sliders" size={16} />
               </button>
             </div>
-            {/* Mobile category chips */}
-            <div className="flex gap-1.5 overflow-x-auto -mx-4 px-4 pb-1.5 cv-scroll-x">
-              <CVChip active={cat === 'all'} onClick={() => setCat('all')}>全部</CVChip>
-              {categories.map((c) => (
-                <CVChip key={c.id} active={cat === c.name} onClick={() => setCat(c.name)}>
-                  {c.description || c.name}
-                </CVChip>
-              ))}
-            </div>
-            {/* Mobile secondary filters */}
-            <div className="flex gap-1.5 mt-2 overflow-x-auto cv-scroll-x pb-1">
-              {([['price', '价格 ↑'], ['priceDesc', '价格 ↓']] as const).map(([k, l]) => (
-                <CVChip key={k} active={sort === k} onClick={() => setSort(k as SortKey)}>{l}</CVChip>
-              ))}
-            </div>
+            {showFilters && (
+              <>
+                {/* Mobile category chips */}
+                <div className="flex gap-1.5 overflow-x-auto -mx-4 px-4 pb-1.5 cv-scroll-x">
+                  <CVChip active={cat === 'all'} onClick={() => setCat('all')}>全部</CVChip>
+                  {categories.map((c) => (
+                    <CVChip key={c.id} active={cat === c.name} onClick={() => setCat(c.name)}>
+                      {c.description || c.name}
+                    </CVChip>
+                  ))}
+                </div>
+                {/* Mobile secondary filters */}
+                <div className="flex gap-1.5 mt-2 overflow-x-auto cv-scroll-x pb-1">
+                  {([['price', '价格 ↑'], ['priceDesc', '价格 ↓']] as const).map(([k, l]) => (
+                    <CVChip key={k} active={sort === k} onClick={() => setSort(k as SortKey)}>{l}</CVChip>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
 
           {/* Desktop header row */}
