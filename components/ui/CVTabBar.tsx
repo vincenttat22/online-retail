@@ -5,10 +5,8 @@ import { usePathname } from 'next/navigation'
 import CVIcon from './CVIcon'
 
 const TABS = [
-  { id: 'home',  href: '/',           icon: 'home',  label: '首页' },
   { id: 'cat',   href: '/catalogue',  icon: 'grid',  label: '分类' },
-  { id: 'promo', href: '/promotions', icon: 'gift',  label: '优惠' },
-  { id: 'me',    href: '/me',         icon: 'user',  label: '我的' },
+  { id: 'me',    href: '/me',         icon: 'user',  label: '关于' },
 ]
 
 export default function CVTabBar() {
@@ -18,7 +16,7 @@ export default function CVTabBar() {
     pathname === '/' ? 'home'
     : pathname.startsWith('/catalogue') ? 'cat'
     : pathname.startsWith('/promotions') ? 'promo'
-    : pathname.startsWith('/me') ? 'me'
+    : pathname.startsWith('/me') || pathname.startsWith('/about') ? 'me'
     : 'home'
 
   return (

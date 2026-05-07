@@ -1,5 +1,11 @@
-import { redirect } from 'next/navigation'
+import AboutScreen from '@/components/screens/AboutScreen'
+import SettingsPanel from '@/components/ui/SettingsPanel'
 
 export default function MePage() {
-  redirect('/catalogue')
+  return (
+    <>
+      <AboutScreen />
+      <SettingsPanel />
+    </>
+  )
 }

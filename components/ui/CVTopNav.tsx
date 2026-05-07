@@ -9,6 +9,7 @@ import CVIcon from './CVIcon'
 
 const NAV_LINKS = [
   { label: '全部商品', href: '/catalogue' },
+  { label: '关于',     href: '/me' },
 ]
 
 export default function CVTopNav() {
@@ -25,6 +26,7 @@ export default function CVTopNav() {
   const isActive = (href: string) => {
     if (href === '/' && pathname === '/') return true
     if (href !== '/' && pathname.startsWith(href)) return true
+    if (href === '/me' && pathname.startsWith('/about')) return true
     return false
   }
 

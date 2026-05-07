@@ -3,6 +3,7 @@ import { Suspense } from 'react'
 import './globals.css'
 import { ThemeProvider } from '@/context/ThemeContext'
 import CVTopNav from '@/components/ui/CVTopNav'
+import CVTabBar from '@/components/ui/CVTabBar'
 
 export const metadata: Metadata = {
   title: 'CV Shop · 卡门小铺',
@@ -42,6 +43,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </Suspense>
             </div>
             {children}
+            <Suspense fallback={null}>
+              <CVTabBar />
+            </Suspense>
           </div>
         </ThemeProvider>
       </body>
