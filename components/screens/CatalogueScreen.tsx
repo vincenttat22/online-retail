@@ -43,7 +43,13 @@ export default function CatalogueScreen({ products, categories, initialCat = 'al
   const filtered = products.filter((p) => {
     if (cat !== 'all' && p.cat !== cat) return false
     if (p.price > priceMax) return false
-    if (q && !(p.zh.includes(q) || p.en.toLowerCase().includes(q.toLowerCase()))) return false
+    if (q) {
+      const qLower = q.toLowerCase()
+      const matchesZh = p.zh.includes(q)
+      const matchesEn = p.en.toLowerCase().includes(qLower)
+      const matchesPinyin = p.pinyinName ? p.pinyinName.toLowerCase().includes(qLower) : false
+      if (!matchesZh && !matchesEn && !matchesPinyin) return false
+    }
     return true
   }).sort((a, b) => {
     if (sort === 'price') return a.price - b.price
@@ -109,7 +115,7 @@ export default function CatalogueScreen({ products, categories, initialCat = 'al
               </Link>
               <div className="flex-1 h-9 rounded-full flex items-center px-3 gap-2" style={{ background: theme.surface }}>
                 <CVIcon name="search" size={15} stroke={theme.inkMuted} />
-                <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="搜索商品 · 红糖姜茶"
+                <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="搜索商品名称/拼音/首字母 (如 htjc)"
                   className="flex-1 bg-transparent border-0 outline-0 text-[13px]"
                   style={{ color: theme.ink, fontFamily: 'inherit' }}
                 />

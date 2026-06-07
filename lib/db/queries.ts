@@ -23,6 +23,7 @@ function toProduct(row: typeof products.$inferSelect, categoryValue: string | nu
     desc: row.description ?? '',
     disc: 0,
     images: images.length > 0 ? images : undefined,
+    pinyinName: row.pinyinName ?? null,
   }
 }
 

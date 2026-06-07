@@ -99,7 +99,7 @@ export default function CVTopNav() {
           <input
             value={q}
             onChange={(e) => handleChange(e.target.value)}
-            placeholder="搜索商品 · 红糖姜茶"
+            placeholder="搜索商品名称/拼音/首字母 (如 htjc)"
             className="flex-1 bg-transparent border-0 outline-none focus:outline-none focus:ring-0 text-[12px] min-w-0"
             style={{ color: theme.ink, fontFamily: 'inherit' }}
           />

@@ -18,6 +18,7 @@ export interface Product {
   disc: number
   badge?: string
   images?: ProductImage[]
+  pinyinName?: string | null
 }
 
 export interface Bundle {

@@ -50,6 +50,7 @@ export const products = pgTable(
     packSize: numeric('pack_size', { precision: 10, scale: 3 }).default('1').notNull(),
     packUnit: varchar('pack_unit', { length: 16 }),
     unit: varchar('unit', { length: 16 }),
+    pinyinName: varchar('pinyin_name', { length: 500 }),
     createdAt: timestamp('created_at'),
   },
   (t) => [
@@ -59,6 +60,7 @@ export const products = pgTable(
     index('products_active_idx').on(t.active),
     index('products_draft_idx').on(t.draft),
     index('products_is_published_idx').on(t.isPublished),
+    index('products_pinyin_name_idx').on(t.pinyinName),
   ],
 )
 
