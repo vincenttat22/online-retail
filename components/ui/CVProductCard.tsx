@@ -36,7 +36,7 @@ export default function CVProductCard({ p, fx, tone = 'a', onClick }: CVProductC
             className="w-full aspect-square object-cover bg-gray-200"
           />
         ) : (
-          <CVPlaceholder label={`${p.en}`} tone={tone} ratio={1} />
+          <CVPlaceholder label={`${p.en || p.zh}`} tone={tone} ratio={1} />
         )}
 
         {/* top-left chips */}
@@ -90,9 +90,11 @@ export default function CVProductCard({ p, fx, tone = 'a', onClick }: CVProductC
         >
           {p.zh}
         </div>
-        <div className="font-sans text-[10px] tracking-wide" style={{ color: 'var(--cv-ink-muted)' }}>
-          {p.en}
-        </div>
+        {p.en && (
+          <div className="font-sans text-[10px] tracking-wide" style={{ color: 'var(--cv-ink-muted)' }}>
+            {p.en}
+          </div>
+        )}
         <div className="mt-1 flex justify-between items-end">
           <CVPriceTag price={p.price} disc={p.disc} />
           <div

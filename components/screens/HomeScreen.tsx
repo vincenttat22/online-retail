@@ -112,11 +112,11 @@ export default function HomeScreen() {
                     {p.badge && <span className="text-[10px] font-semibold tracking-wide" style={{ color: theme.gold }}>· {p.badge}</span>}
                   </div>
                   <div className="font-serif font-bold leading-snug tracking-tight text-[18px] xl:text-[22px]" style={{ color: theme.ink }}>{p.zh}</div>
-                  <div className="font-sans text-[11px] mt-1" style={{ color: theme.inkMuted }}>{p.en}</div>
+                  {p.en && <div className="font-sans text-[11px] mt-1" style={{ color: theme.inkMuted }}>{p.en}</div>}
                 </div>
                 <CVPriceTag price={p.price} disc={p.disc} />
               </div>
-              <CVPlaceholder label={p.en} tone={i === 0 ? 'e' : 'b'} ratio={1} />
+              <CVPlaceholder label={p.en || p.zh} tone={i === 0 ? 'e' : 'b'} ratio={1} />
             </button>
           ))}
         </div>
@@ -180,7 +180,7 @@ export default function HomeScreen() {
       <div className="md:hidden px-4 pt-6">
         <Link href={`/product/${top.id}`} className="block rounded-[22px] overflow-hidden" style={{ background: theme.surface }}>
           <div className="relative">
-            <CVPlaceholder label={`editorial · ${top.en}`} tone="b" ratio={1.6} />
+            <CVPlaceholder label={`editorial · ${top.en || top.zh}`} tone="b" ratio={1.6} />
             <div className="absolute inset-0 p-4 flex flex-col justify-end" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.55), transparent 55%)', color: '#fff' }}>
               <div className="font-mono text-[9px] tracking-[2px] opacity-80">FEATURED · DEAL OF THE DAY</div>
               <div className="font-serif text-[22px] font-bold mt-1 tracking-tight">{top.zh}</div>

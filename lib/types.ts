@@ -9,6 +9,7 @@ export interface Product {
   id: number
   zh: string
   en: string
+  sku?: string
   cat?: 'MEAT_SEAFOOD' | 'SNACKS' | 'HOUSEHOLD' | 'BEAUTY_HEALTH' | 'OTHER'
   price: number
   unit?: string

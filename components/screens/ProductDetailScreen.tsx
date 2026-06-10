@@ -113,7 +113,7 @@ export default function ProductDetailScreen({ product: p, relatedProducts: relat
                 className="w-full aspect-square object-cover bg-gray-200"
               />
             ) : (
-              <CVPlaceholder label={`${p.en} · ${imgIdx + 1}/${images.length || 1}`} tone={toneFor(p.id + imgIdx)} ratio={1} />
+              <CVPlaceholder label={`${p.en || p.zh} · ${imgIdx + 1}/${images.length || 1}`} tone={toneFor(p.id + imgIdx)} ratio={1} />
             )}
 
             {/* Mobile nav overlay */}
@@ -244,7 +244,7 @@ export default function ProductDetailScreen({ product: p, relatedProducts: relat
           </div>
 
           <h1 className="m-0 font-serif font-extrabold leading-snug tracking-tight text-[22px] md:text-[28px] xl:text-[36px]" style={{ color: theme.ink }}>{p.zh}</h1>
-          <div className="font-sans text-xs md:text-[14px] mt-1 tracking-wide" style={{ color: theme.inkMuted }}>{p.en}</div>
+          {p.en && <div className="font-sans text-xs md:text-[14px] mt-1 tracking-wide" style={{ color: theme.inkMuted }}>{p.en}</div>}
 
           {/* Price block */}
           <div className="mt-3.5 p-3.5 md:p-5 rounded-2xl" style={{ background: theme.surface, border: `0.5px solid ${theme.line}` }}>

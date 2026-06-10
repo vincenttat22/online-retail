@@ -14,7 +14,8 @@ function toProduct(row: typeof products.$inferSelect, categoryValue: string | nu
   return {
     id: row.id,
     zh: row.name,
-    en: row.sku ?? '',
+    en: '',
+    sku: row.sku ?? undefined,
     cat: categoryValue as any,
     price: Number(row.unitPrice),
     unit: row.unit ?? undefined,

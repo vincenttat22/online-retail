@@ -46,9 +46,10 @@ export default function CatalogueScreen({ products, categories, initialCat = 'al
     if (q) {
       const qLower = q.toLowerCase()
       const matchesZh = p.zh.includes(q)
-      const matchesEn = p.en.toLowerCase().includes(qLower)
+      const matchesEn = p.en ? p.en.toLowerCase().includes(qLower) : false
+      const matchesSku = p.sku ? p.sku.toLowerCase().includes(qLower) : false
       const matchesPinyin = p.pinyinName ? p.pinyinName.toLowerCase().includes(qLower) : false
-      if (!matchesZh && !matchesEn && !matchesPinyin) return false
+      if (!matchesZh && !matchesEn && !matchesPinyin && !matchesSku) return false
     }
     return true
   }).sort((a, b) => {
