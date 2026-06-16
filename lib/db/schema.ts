@@ -50,6 +50,7 @@ export const products = pgTable(
     packSize: numeric('pack_size', { precision: 10, scale: 3 }).default('1').notNull(),
     packUnit: varchar('pack_unit', { length: 16 }),
     unit: varchar('unit', { length: 16 }),
+    minimumQuantity: numeric('minimum_quantity', { precision: 10, scale: 3 }),
     pinyinName: varchar('pinyin_name', { length: 500 }),
     createdAt: timestamp('created_at'),
   },

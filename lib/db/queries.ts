@@ -14,9 +14,15 @@ import { eq, and, inArray, desc, asc, sql, gte, lt, isNotNull } from 'drizzle-or
 import type { Product, Recipe, RecipeIngredient, GroupBuyData, GroupBuyProduct, TopSeller, NewArrivalProduct } from '@/lib/types'
 
 function toProduct(row: typeof products.$inferSelect, categoryValue: string | null, images: any[] = []): Product {
+  const minQty = row.minimumQuantity ? Number(row.minimumQuantity) : undefined
+  const displayUnit = (row.unit && row.unit.trim()) || (row.packUnit && row.packUnit.trim()) || '件'
+  const displayName = minQty && minQty > 1
+    ? `${row.name} ( 购买${minQty}${displayUnit}起)`
+    : row.name
+
   return {
     id: row.id,
-    zh: row.name,
+    zh: displayName,
     en: '',
     sku: row.sku ?? undefined,
     cat: categoryValue as any,
@@ -28,6 +34,7 @@ function toProduct(row: typeof products.$inferSelect, categoryValue: string | nu
     disc: 0,
     images: images.length > 0 ? images : undefined,
     pinyinName: row.pinyinName ?? null,
+    minimumQuantity: minQty,
   }
 }
 

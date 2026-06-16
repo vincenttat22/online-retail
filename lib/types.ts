@@ -20,6 +20,7 @@ export interface Product {
   badge?: string
   images?: ProductImage[]
   pinyinName?: string | null
+  minimumQuantity?: number
 }
 
 export interface GroupBuyProduct extends Product {
