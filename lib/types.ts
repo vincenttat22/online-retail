@@ -22,6 +22,28 @@ export interface Product {
   pinyinName?: string | null
 }
 
+export interface GroupBuyProduct extends Product {
+  orderCount: number
+}
+
+export interface GroupBuyData {
+  snailListId: number
+  title: string | null
+  endedAt: string | null
+  totalOrders: number
+  products: GroupBuyProduct[]
+  allProductIds: number[]
+}
+
+export interface TopSeller extends Product {
+  rank: number
+  orderCount: number
+}
+
+export interface NewArrivalProduct extends Product {
+  daysAgo: number
+}
+
 export interface Bundle {
   id: string
   zh: string

@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import CVIcon from './CVIcon'
 
 const TABS = [
+  { id: 'home',   href: '/',  icon: 'home',  label: '首页' },
   { id: 'cat',   href: '/catalogue',  icon: 'grid',  label: '分类' },
   { id: 'me',    href: '/me',         icon: 'user',  label: '关于' },
 ]

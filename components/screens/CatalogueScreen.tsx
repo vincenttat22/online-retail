@@ -20,9 +20,11 @@ interface CatalogueScreenProps {
   categories: DbProductCategory[]
   initialCat?: string
   initialQ?: string
+  /** When set, restricts the grid to exactly these product ids (e.g. "查看完整列表" from a Jielong). */
+  idsFilter?: number[]
 }
 
-export default function CatalogueScreen({ products, categories, initialCat = 'all', initialQ = '' }: CatalogueScreenProps) {
+export default function CatalogueScreen({ products, categories, initialCat = 'all', initialQ = '', idsFilter }: CatalogueScreenProps) {
   const { theme, fx } = useTheme()
   const router = useRouter()
   const productMaxPrice = Math.max(20, ...products.map((p) => Math.ceil(p.price)))
@@ -40,7 +42,10 @@ export default function CatalogueScreen({ products, categories, initialCat = 'al
     setCat(initialCat)
   }, [initialCat])
 
+  const idsFilterSet = idsFilter && idsFilter.length > 0 ? new Set(idsFilter) : null
+
   const filtered = products.filter((p) => {
+    if (idsFilterSet && !idsFilterSet.has(p.id)) return false
     if (cat !== 'all' && p.cat !== cat) return false
     if (p.price > priceMax) return false
     if (q) {
@@ -62,6 +67,16 @@ export default function CatalogueScreen({ products, categories, initialCat = 'al
 
   return (
     <div className="animate-cv-fade">
+      {idsFilterSet && (
+        <div className="flex items-center justify-between gap-3 px-4 md:px-6 xl:px-10 py-2.5 mb-1" style={{ background: 'var(--cv-accent-soft)' }}>
+          <span className="text-xs md:text-[13px] font-semibold" style={{ color: 'var(--cv-accent)' }}>
+            🔥 本周接龙完整列表 · {idsFilterSet.size} 件商品
+          </span>
+          <Link href="/catalogue" className="text-xs font-medium shrink-0" style={{ color: 'var(--cv-accent)' }}>
+            查看全部商品
+          </Link>
+        </div>
+      )}
       {/*
        * Layout: on mobile, a sticky search header sits above the grid.
        * On md+, the sidebar sits beside the grid (CSS grid layout).

@@ -12,12 +12,18 @@ interface Props {
 
 export default function CataloguePageClient({ products, categories }: Props) {
   const params = useSearchParams()
+  const idsParam = params.get('ids')
+  const idsFilter = idsParam
+    ? idsParam.split(',').map((id) => parseInt(id, 10)).filter((id) => Number.isFinite(id))
+    : undefined
+
   return (
     <CatalogueScreen
       products={products}
       categories={categories}
       initialCat={params.get('cat') ?? 'all'}
       initialQ={params.get('q') ?? ''}
+      idsFilter={idsFilter}
     />
   )
 }

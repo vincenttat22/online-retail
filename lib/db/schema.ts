@@ -84,6 +84,33 @@ export type DbProduct = typeof products.$inferSelect
 export type DbProductImage = typeof productImages.$inferSelect
 export type DbProductCategory = typeof productCategories.$inferSelect
 
+// ─────────────────────────────────────────────────────────────────────────
+// JieLong (snail list / order) tables — owned by the `online-shop` admin app
+// schema, declared here read-only since both apps share the same database.
+// Only the columns this storefront actually reads are included.
+// ─────────────────────────────────────────────────────────────────────────
+
+export const snailLists = pgTable('snail_lists', {
+  id: serial('id').primaryKey(),
+  title: varchar('title', { length: 255 }),
+  endedAt: timestamp('ended_at'),
+  createdAt: timestamp('created_at').defaultNow(),
+})
+
+export const orders = pgTable('orders', {
+  id: serial('id').primaryKey(),
+  customerId: integer('customer_id'),
+  snailListId: integer('snail_list_id'),
+  createdAt: timestamp('created_at').defaultNow(),
+})
+
+export const orderItems = pgTable('order_items', {
+  id: serial('id').primaryKey(),
+  orderId: integer('order_id').notNull(),
+  productId: integer('product_id'),
+  quantity: numeric('quantity', { precision: 10, scale: 3 }).notNull(),
+})
+
 export const cuisineTypeEnum = pgEnum('cuisine_type', ['chinese', 'western', 'fusion'])
 export const recipeDifficultyEnum = pgEnum('recipe_difficulty', ['easy', 'medium', 'hard'])
 export const recipeStatusEnum = pgEnum('recipe_status', ['draft', 'published'])
