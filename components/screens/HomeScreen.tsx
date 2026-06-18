@@ -34,7 +34,7 @@ function SectionHead({ emoji, zh, en, right }: { emoji: string; zh: string; en: 
     <div className="flex items-start justify-between gap-3">
       <div>
         <div className="flex items-center gap-2">
-          <span className="text-lg md:text-xl">{emoji}</span>
+          <span className="text-[10px] md:text-xl">{emoji}</span>
           <span className="font-serif font-black text-xl md:text-3xl tracking-tight" style={{ color: 'var(--cv-ink)' }}>
             {zh}
           </span>
@@ -215,7 +215,7 @@ export default function HomeScreen({ groupBuy, topSellers, newArrivals }: HomeSc
         <div className="md:hidden">
           <div className="px-4 mb-3">
             <SectionHead
-              emoji="🔥"
+              emoji=""
               zh="本周团购"
               en="THIS WEEK · 本周接龙"
               right={
