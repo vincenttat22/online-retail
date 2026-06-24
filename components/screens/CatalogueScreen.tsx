@@ -132,7 +132,7 @@ export default function CatalogueScreen({ products, categories, initialCat = 'al
               <div className="flex-1 h-9 rounded-full flex items-center px-3 gap-2" style={{ background: theme.surface }}>
                 <CVIcon name="search" size={15} stroke={theme.inkMuted} />
                 <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="搜索商品名称/拼音/首字母 (如 htjc)"
-                  className="flex-1 bg-transparent border-0 outline-0 text-[13px]"
+                  className="flex-1 bg-transparent border-0 outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 text-[13px]"
                   style={{ color: theme.ink, fontFamily: 'inherit' }}
                 />
                 {q && (

@@ -100,7 +100,7 @@ export default function CVTopNav() {
             value={q}
             onChange={(e) => handleChange(e.target.value)}
             placeholder="搜索商品名称/拼音/首字母 (如 htjc)"
-            className="flex-1 bg-transparent border-0 outline-none focus:outline-none focus:ring-0 text-[12px] min-w-0"
+            className="flex-1 bg-transparent border-0 outline-none focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0 text-[12px] min-w-0"
             style={{ color: theme.ink, fontFamily: 'inherit' }}
           />
           {q && (
