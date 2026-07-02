@@ -4,6 +4,7 @@ import './globals.css'
 import { ThemeProvider } from '@/context/ThemeContext'
 import CVTopNav from '@/components/ui/CVTopNav'
 import CVTabBar from '@/components/ui/CVTabBar'
+import { VisitorTracker } from '@/components/VisitorTracker'
 
 export const metadata: Metadata = {
   title: 'CV Shop · 卡门小铺',
@@ -47,6 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <CVTabBar />
             </Suspense>
           </div>
+          <VisitorTracker />
         </ThemeProvider>
       </body>
     </html>

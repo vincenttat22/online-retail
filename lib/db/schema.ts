@@ -11,6 +11,7 @@ import {
   jsonb,
   uniqueIndex,
   index,
+  date,
 } from 'drizzle-orm/pg-core'
 
 export const fulfillmentTypeEnum = pgEnum('fulfillment_type', ['ON_DEMAND', 'STOCK', 'DROPSHIP'])
@@ -176,3 +177,25 @@ export const recipeIngredients = pgTable(
 
 export type DbRecipe = typeof recipes.$inferSelect
 export type DbRecipeIngredient = typeof recipeIngredients.$inferSelect
+
+// ═══════════════════════════════════════════════════════════════════════════
+// DAILY VISIT COUNT TRACKER
+// ═══════════════════════════════════════════════════════════════════════════
+
+export const dailyVisits = pgTable(
+  'daily_visits',
+  {
+    id: serial('id').primaryKey(),
+    date: date('date').notNull(),
+    visitorHash: varchar('visitor_hash', { length: 64 }).notNull(),
+    path: varchar('path', { length: 2048 }).notNull(),
+    views: integer('views').default(1).notNull(),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+  },
+  (t) => [
+    uniqueIndex('daily_visits_date_visitor_hash_path_idx').on(t.date, t.visitorHash, t.path),
+    index('daily_visits_date_idx').on(t.date),
+    index('daily_visits_path_idx').on(t.path),
+  ]
+)
