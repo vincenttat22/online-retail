@@ -1,4 +1,16 @@
+# `packages` is required by pnpm <= 10.x (Cloudflare's build image), even for a
+# single-package repo. Without it: "ERROR packages field missing or empty".
+packages:
+  - .
+
+# Build-script approvals: `allowBuilds` is read by pnpm 11+ (local),
+# `onlyBuiltDependencies` by pnpm 9/10 (CI). Keep the two lists in sync.
 allowBuilds:
   esbuild: true
   sharp: true
   workerd: true
+
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+  - workerd
