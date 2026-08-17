@@ -47,7 +47,6 @@ export const products = pgTable(
     active: boolean('active').default(true),
     draft: boolean('draft').default(false).notNull(),
     isPublished: boolean('is_published').default(false).notNull(),
-    currentStock: integer('current_stock'),
     packSize: numeric('pack_size', { precision: 10, scale: 3 }).default('1').notNull(),
     packUnit: varchar('pack_unit', { length: 16 }),
     unit: varchar('unit', { length: 16 }),
